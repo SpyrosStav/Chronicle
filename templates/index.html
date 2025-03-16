@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Apothikes & Molintiria{% endblock %}
+
+{% block content %}
+
+<h1>Welcome to the D&D App!</h1>
+<div id="characters">
+    {% for character in characters %}
+    <p>{{character.id}}: {{character.name}}</p><br>
+    {% endfor %}
+</div>
+
+
+<!-- <script>
+    fetch('/api/characters')
+        .then(response => response.json())
+        .then(data => {
+            const charactersDiv = document.getElementById('characters');
+            data.forEach(character => {
+                const characterDiv = document.createElement('div');
+                characterDiv.textContent = character.name;
+                charactersDiv.appendChild(characterDiv);
+            });
+        });
+</script> -->
+
+{% endblock %}
+
