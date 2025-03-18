@@ -5,30 +5,37 @@
     position: relative;
 }
 
-.navbar-custom-text {
-    color: #C9A66B !important; /* !important to override Bootstrap */
-}
-
-.navbar-custom-text .nav-link, .navbar-custom-text {
-    color: #C9A66B !important;
+.navbar {
+    background-color: #4B2E1E;
 }
 
 .navbar-brand {
-    color: #967d51 !important;
+    color: #997f51 ;
 }
 
-/* .navbar-custom-text .navbar-nav .nav-link.active,
-.navbar-custom-text .navbar-nav .nav-link:focus, */
-.navbar-custom-text .navbar-nav .nav-link:hover {
+.nav-link {
     color: #997f51 !important;
 }
 
-.navbar-custom-text .dropdown-menu .dropdown-item {
-    color: black !important;
+.nav-link:hover {
+    color: #d3af71 !important;
 }
 
+.navbar-brand:hover {
+    color: #d3af71 !important;
+}
+
+/* .navbar-custom-text .dropdown-menu .dropdown-item {
+    color: black !important;
+} */
+
 #content-wrap {
+    padding-top: 2.5rem;
     padding-bottom: 2.5rem;    /* Footer height */
+}
+
+.title {
+    text-align: center;
 }
 
 footer{

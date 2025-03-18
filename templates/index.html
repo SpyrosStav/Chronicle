@@ -4,7 +4,10 @@
 
 {% block content %}
 
-<h1>Welcome to the D&D App!</h1>
+<div class="title">
+    <h1>Welcome to the D&D App!</h1>
+</div>
+
 <div id="characters">
     {% for character in characters %}
     <p>{{character.id}}: {{character.name}}</p><br>

@@ -14,6 +14,20 @@ def home():
 
     return render_template("index.html", characters = characters)
 
+@app.route("/session")
+def start_session():
+    return render_template("session.html")
+
+# Serve the character page
+@app.route("/characters")
+def characters_list():
+    return render_template("characters.html")
+
+# Serve the campaigns page
+@app.route("/campaigns")
+def campaigns_list():
+    return render_template("campaigns.html")
+
 # Serve the profile page
 @app.route("/profile")
 def profile():
@@ -24,6 +38,7 @@ def profile():
 def about():
     return render_template("about.html")
 
+# --------------------------------------------------- API Calls --------------------------------------------------- #
 @app.route("/api/characters")
 def get_characters():
     characters = [
