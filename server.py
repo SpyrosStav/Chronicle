@@ -1,7 +1,14 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 server_process = None
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://@SSTAVROPOULOS/DnDWebApp?driver=ODBC+Driver+17+for+SQL+Server&Trusted_Connection=yes'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 # Serve the home page
 @app.route("/")
@@ -46,6 +53,15 @@ def get_characters():
         {'id': 2, 'name': 'Frodo'},
     ]
     return jsonify(characters)
+
+@app.route("/api/testdb")
+def test():
+    # new_user = User(name="John Doe", email="johndoe@example.com")
+    # db.session.add(new_user)
+    # db.session.commit()
+    # User.query.all()
+    return
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

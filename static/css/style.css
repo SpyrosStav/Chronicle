@@ -10,7 +10,11 @@
 }
 
 .navbar-brand {
-    color: #997f51 ;
+    color: #997f51;
+}
+
+.nav-item{
+    color: #997f51 !important;
 }
 
 .nav-link {
