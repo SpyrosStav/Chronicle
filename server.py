@@ -1,26 +1,27 @@
-from flask import Flask, render_template, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, jsonify, request, session, redirect
+from dotenv import load_dotenv
+import pyodbc,os
 
 app = Flask(__name__)
-server_process = None
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://@SSTAVROPOULOS/DnDWebApp?driver=ODBC+Driver+17+for+SQL+Server&Trusted_Connection=yes'
+load_dotenv("config.env")
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# --------------------------------------------------- Database Connection Setup --------------------------------------------------- #
+SERVER = os.getenv("SERVER")
+DATABASE = os.getenv("DATABASE")
+DRIVER = 'ODBC Driver 17 for SQL Server'
+CONN_STR = f'DRIVER={DRIVER};SERVER={SERVER};DATABASE={DATABASE};Trusted_Connection=yes'
+def get_db_connection():
+    return pyodbc.connect(CONN_STR)
 
-db = SQLAlchemy(app)
 
+# --------------------------------------------------- Pages Serving --------------------------------------------------- #
 # Serve the home page
 @app.route("/")
 def home():
+    return render_template("index.html")
 
-    characters = [
-        {'id': 1, 'name': 'Gandalf'},
-        {'id': 2, 'name': 'Frodo'},
-    ]
-
-    return render_template("index.html", characters = characters)
-
+#Serve the page where the actual session will be played
 @app.route("/session")
 def start_session():
     return render_template("session.html")
@@ -40,13 +41,9 @@ def campaigns_list():
 def profile():
     return render_template("profile.html")
 
-# Serve the about page
-@app.route("/about")
-def about():
-    return render_template("about.html")
-
 # --------------------------------------------------- API Calls --------------------------------------------------- #
-@app.route("/api/characters")
+# Get Characters
+@app.route("/api/characters", methods = ['GET']) 
 def get_characters():
     characters = [
         {'id': 1, 'name': 'Gandalf'},
@@ -54,38 +51,53 @@ def get_characters():
     ]
     return jsonify(characters)
 
-@app.route("/api/testdb")
-def test():
-    # new_user = User(name="John Doe", email="johndoe@example.com")
-    # db.session.add(new_user)
-    # db.session.commit()
-    # User.query.all()
+# Create New Character
+@app.route("/api/characters", methods = ['POST']) 
+def add_new_character():
     return
 
+# Get Profile Info
+@app.route("/api/profile", methods = ['GET'])
+def fetch_profile():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("""SELECT * FROM dbo.Players 
+                   WHERE player_id = 1""")
+    row = cursor.fetchone()
+    
+    player_info = {
+        "player name" : row[1],
+        "player email" : row[2]
+    }
 
+    cursor.close()
+    conn.close()
+
+    return jsonify(player_info), 200
+
+@app.route("/api/test") # Simple test query
+def test_connection():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT name,email FROM dbo.Players")  
+        rows = cursor.fetchall()
+
+        players = []
+        for row in rows:
+            players.append({
+                "player name" : row[0],
+                "player email" : row[1],
+            })
+
+        cursor.close()
+        conn.close()
+        return jsonify(players), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# --------------------------------------------------- MAIN --------------------------------------------------- #
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
-
-
-
-
-
-
-
-
-
-
-# @app.route("/start")
-# def start_server():
-#     global server_process
-#     server_process = subprocess.Popen(["python", "-m", "http.server", "8000"])
-#     return "Server started"
-
-# @app.route("/stop")
-# def stop_server():
-#     global server_process
-#     if server_process:
-#         server_process.kill()
-#         server_process = None
-#     return "Server stopped"
