@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}A&M - Characters List{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/characterPage.css') }}">
+
+<!-- Basic Info Card (Name, Race, Class etc)-->
+<div class="basicInfoCard">
+    <div class="charImage">
+        <img src="static/images/charImage.jpg" alt="character-image">
+    </div>
+    <div>
+        <div class="charName">
+            <h1 class="inline">Beans </h1> 
+            <p class="inline className">the <span>Gnosiaki</span> <span>Psyxologos</span></p>
+            <p class="inline"> Level: 10</p>
+        </div>
+        
+        <div class="charInfo">
+            <!-- <label for="race">Race</label> -->
+            <div name="race">Race: Bnuie</div>
+            <!-- <label for="class">Class</label> -->
+            <div name="background">Background: Patrinia</div>
+            <!-- <label for="alignment">Alignment</label> -->
+            <div name="alignment">Alignment: Chaotic</div>
+        </div>
+    </div>
+</div>
+
+<!-- Attributes card -->
+<div class="attributesCard">
+
+    <div class="leftAttributesCard">
+        <div class="profAttributes">
+            <div>+4 PROFICIENCY</div>
+            <div>PASSIVE PERCEPTION 12</div>
+            <div>2 INSPIRATION </div>
+            <div>PASSIVE INSIGHT 16</div>
+        </div>
+
+        <div class="mainAttributesCard">
+            <div class="">
+                <div class="statcard">
+                    <div class="">STRENGTH</div>
+                    <div>+3</div>
+                    <div>16</div>
+                </div>
+                <div class="savingthrows">
+                    <div class="">Saving Throw: +3</div>
+                    <div class="">Athletics: +3</div>
+                </div>
+            </div>
+
+            <!-- <div class="">
+                <div class="">AGI: 14</div>
+                <div class="">Modifier: +2</div>
+                <div class="">Saving Throw: +2</div>
+                <div class="">Acrobatics: +2</div>
+                <div class="">Sleight of Hand: +2</div>
+                <div class="">Stealth: +2</div>
+            </div> -->
+        </div>
+    </div>
+
+    <div class="middleAttributesCard">
+        <div class="attribute">
+            <div class="">INT: -2</div>
+            <div class="">Modifier: -10</div>
+        </div>
+        <div class="attribute">
+            <div class="">Mpinies: 25</div>
+            <div class="">Modifier: +5</div>
+        </div>
+    </div>
+
+    <div class="rightAttributesCard">
+        <div class="attribute">
+            <div class="">INT: -2</div>
+            <div class="">Modifier: -10</div>
+        </div>
+        <div class="attribute">
+            <div class="">Mpinies: 25</div>
+            <div class="">Modifier: +5</div>
+        </div>
+    </div>
+
+</div>
+ 
+
+
+
+{% endblock %}

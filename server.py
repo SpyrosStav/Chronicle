@@ -1,12 +1,12 @@
-from flask import Flask, render_template, jsonify, request, session, redirect
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from dotenv import load_dotenv
+from datetime import timedelta
 import pyodbc,os
 
 app = Flask(__name__)
-
 load_dotenv("config.env")
 
-# --------------------------------------------------- Database Connection Setup --------------------------------------------------- #
+# --------------------------------------------------- DB Connection --------------------------------------------------- #
 SERVER = os.getenv("SERVER")
 DATABASE = os.getenv("DATABASE")
 DRIVER = 'ODBC Driver 17 for SQL Server'
@@ -14,7 +14,24 @@ CONN_STR = f'DRIVER={DRIVER};SERVER={SERVER};DATABASE={DATABASE};Trusted_Connect
 def get_db_connection():
     return pyodbc.connect(CONN_STR)
 
+# --------------------------------------------------- Login Handler --------------------------------------------------- #
+app.secret_key = os.getenv("SECRET_KEY")
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=1) # Set session to be permanent and expire after 1 hour
 
+@app.route("/login", methods = ['GET','POST'])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        test = username + " " + password
+        session["user_id"] = username
+        session.permanent = True
+    return render_template("index.html",test = test)
+
+@app.route("/logout")
+def logout():
+    session.pop("user_id", None)  # Remove user session
+    return redirect(url_for("home"))  # Redirect to homepage
 # --------------------------------------------------- Pages Serving --------------------------------------------------- #
 # Serve the home page
 @app.route("/")
@@ -22,14 +39,14 @@ def home():
     return render_template("index.html")
 
 #Serve the page where the actual session will be played
-@app.route("/session")
-def start_session():
-    return render_template("session.html")
+@app.route("/play")
+def play():
+    return render_template("play.html")
 
 # Serve the character page
 @app.route("/characters")
 def characters_list():
-    return render_template("characters.html")
+    return render_template("characterPage.html")
 
 # Serve the campaigns page
 @app.route("/campaigns")

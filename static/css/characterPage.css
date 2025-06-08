@@ -1,0 +1,108 @@
+.basicInfoCard {
+    display: flex;     align-items: flex-start;     padding-bottom: 20px; }
+
+/* .basicInfoCard div {
+    margin: auto;    width: 33%;    text-align: center; } */
+
+.charImage{     margin-left: 5%; width: 20%; }
+
+.charImage img{ 
+    height: 200px; 
+    width: 200px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    aspect-ratio: 1 / 1; 
+    display: block; 
+}
+
+.charName {    padding: 0px 30px; box-sizing: border-box; }
+
+.charName h1 {     text-align: center; }
+
+.inline {   display: inline-block; margin-right: 10px;}
+
+.className {  font-size: 25px; }
+
+/* .charInfo {     display: flex;     flex-wrap: wrap; } */
+
+.charInfo div {     width: 50%;    box-sizing: border-box;    padding: 0px 30px; }
+
+.classInfo {     padding: 0px 30px; }
+
+.subclassInfo {    display: flex;     align-items: center;     justify-content: center; }
+
+.attributesCard {    
+    display: flex;     
+    /* align-items: center;  */
+}
+
+.attributesCard > div {
+    flex: 1;
+    margin: 10px;
+    border: solid black 5px;
+}
+
+.profAttributes{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    border: solid black 2px;
+    margin: 10px;
+    gap: 10px;
+}
+
+.profAttributes > div {
+    flex: 0 0 calc(50% - 10px);
+    padding: 5px;
+    text-align: center;
+    border: dotted red 2px;
+    box-sizing: border-box;
+    margin: 0; /* remove margin */
+}
+
+.mainAttributesCard {
+    padding: 0% 10%;
+}
+
+.mainAttributesCard > div {
+    display: flex;
+}
+
+.mainAttributesCard > div > div{
+    margin: 10px;
+}
+
+.statcard {
+    display: flex;
+    flex-direction: column;  /* stack inner divs vertically */
+    align-items: center;     /* center horizontally */
+    justify-content: center; /* center vertically */
+    height: 100%;            /* or set a fixed height */
+    width: 25%;
+}
+
+.savingthrows{
+    width: 75%;
+    padding-left: 30px;
+}
+
+
+
+/* .attribute{     
+    display: flex;     
+    align-items: center;
+    margin: 10px 0px; 
+    border: solid 3px; 
+    border-radius: 1.5rem; 
+    min-height: 3.5em;
+} */
+
+.attribute div{     margin: auto; }
+
+
+
+
+
+
+
+
