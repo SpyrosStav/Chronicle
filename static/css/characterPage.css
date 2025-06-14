@@ -1,10 +1,13 @@
 .basicInfoCard {
-    display: flex;     align-items: flex-start;     padding-bottom: 20px; }
+    display: flex;     
+    align-items: center;
+    gap: 10px; 
+    padding-bottom: 20px; }
 
 /* .basicInfoCard div {
     margin: auto;    width: 33%;    text-align: center; } */
 
-.charImage{     margin-left: 5%; width: 20%; }
+.charImage{     margin-left: 5%; width: 20%; max-width: 200px;}
 
 .charImage img{ 
     height: 200px; 
@@ -15,15 +18,18 @@
     display: block; 
 }
 
-.charName {    padding: 0px 30px; box-sizing: border-box; }
+.charName { 
+    padding: 0px 30px; 
+    box-sizing: border-box; 
+}
 
 .charName h1 {     text-align: center; }
 
 .inline {   display: inline-block; margin-right: 10px;}
 
-.className {  font-size: 25px; }
-
-/* .charInfo {     display: flex;     flex-wrap: wrap; } */
+.className {  
+    font-size: 25px; 
+}
 
 .charInfo div {     width: 50%;    box-sizing: border-box;    padding: 0px 30px; }
 
@@ -32,8 +38,8 @@
 .subclassInfo {    display: flex;     align-items: center;     justify-content: center; }
 
 .attributesCard {    
-    display: flex;     
-    /* align-items: center;  */
+    display: flex;
+    gap: 15px;
 }
 
 .attributesCard > div {
@@ -43,21 +49,52 @@
 }
 
 .profAttributes{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    border: solid black 2px;
-    margin: 10px;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 10px;
+    justify-items: center;
+    padding: 10px;
+    margin: auto;
 }
 
-.profAttributes > div {
-    flex: 0 0 calc(50% - 10px);
-    padding: 5px;
-    text-align: center;
-    border: dotted red 2px;
+.statBlock {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 4px 8px;
+    
+    position: relative;
     box-sizing: border-box;
-    margin: 0; /* remove margin */
+    border: 2px solid black;
+    width: 220px; 
+}
+
+.profAttributes > :nth-child(even) {
+    justify-content: flex-end;
+}
+
+.statBlock:hover {
+  background-color: #e0e0ff;
+  cursor: pointer;
+  border-color: #6666ff;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.label{
+    text-align: center;
+    flex: 1;
 }
 
 .mainAttributesCard {
@@ -72,21 +109,20 @@
     margin: 10px;
 }
 
-.statcard {
+.statValue {
     display: flex;
     flex-direction: column;  /* stack inner divs vertically */
     align-items: center;     /* center horizontally */
     justify-content: center; /* center vertically */
     height: 100%;            /* or set a fixed height */
     width: 25%;
+    border: 2px solid black;
 }
 
-.savingthrows{
+.skillChecks{
     width: 75%;
     padding-left: 30px;
 }
-
-
 
 /* .attribute{     
     display: flex;     
@@ -97,7 +133,32 @@
     min-height: 3.5em;
 } */
 
-.attribute div{     margin: auto; }
+.attribute div{ margin: auto; }
+
+.attributeName {
+    font-weight: bold;
+}
+
+.modifier {
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+}
+
+.abilityScore {
+    font-size: 1.5em;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 60px;
+    height: 30px;
+    text-align: center;
+    line-height: 25px;
+    margin-bottom: 5px;
+}
 
 
 

@@ -5,23 +5,23 @@
     position: relative;
 }
 
-.navbar {    background-color: #4B2E1E; }
+.navbar { background-color: #4B2E1E; }
 
-.navbar-brand {     color: #997f51; }
+.navbar-brand { color: #c2a067; }
 
-.nav-item{     color: #997f51 !important; }
+.nav-item{ color: #c2a067 !important; }
 
-.nav-link {   color: #997f51 !important; }
+.nav-link { color: #c2a067 !important; }
 
-.nav-link:hover {     color: #d3af71 !important; }
+.nav-link:hover { color: #e7c891 !important; }
 
-.navbar-brand:hover {    color: #d3af71 !important; }
+.navbar-brand:hover { color: #e7c891 !important; }
 
 footer {
     display: flex;
     align-items: center;
     background-color: #4B2E1E;
-    color: #997f51;
+    color: #c2a067;
     width: 100%;
 }
 
