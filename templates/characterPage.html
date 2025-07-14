@@ -2,56 +2,64 @@
 
 {% block title %}A&M - Characters List{% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/characterPage.css') }}">
+{% endblock %}
+
+
+<!-- MAIN BODY -->
 {% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/characterPage.css') }}">
+<div id="char-sheet-root" data-charid="{{char.id}}"></div>
 
-<!-- Basic Info Card (Name, Race, Class etc)-->
-<div class="basicInfoCard">
-    <div class="charImage">
-        <img src="static/images/charImage.jpg" alt="character-image">
+<!-- BASIC INFO CARD (Name, Race, Class etc)-->
+<!-- <div class="basicInfoCard">
+    
+    <div class="charImageWrapper">
+        <div class="charImage">
+            <img src="static/images/charImage.jpg" alt="character-image">
+        </div>
+        <div class="levelBadge">10</div>
     </div>
+
     <div>
         <div class="charName">
-            <h1 class="inline">Nef </h1> 
+            <h1 class="inline text-center">Nef </h1> 
             <p class="inline className">the <span>Gnosiaki</span> <span>Psyxologos</span></p>
-            <p class="inline"> Level: 10</p>
         </div>
         
         <div class="charInfo">
-            <!-- <label for="race">Race</label> -->
-            <div name="race">Race: Goblin</div>
-            <!-- <label for="class">Class</label> -->
-            <div name="background">Background: Patrinia</div>
-            <!-- <label for="alignment">Alignment</label> -->
-            <div name="alignment">Alignment: Chaotic</div>
+            <div data-name="race">Race: Goblin</div>
+            <div data-name="background">Background: Patrinia</div>
+            <div data-name="alignment">Alignment: Chaotic</div>
         </div>
     </div>
-</div>
+</div> -->
 
-<!-- Attributes card -->
+<!-- MAIN CARD (Attributes, Weapons and Skills) -->
 <div class="attributesCard">
 
+    <!-- Left Card (Attributes)-->
     <div class="leftAttributesCard">
 
         <div class="profAttributes">
-            <div class="statBlock">
+            <div class="profBlock bg-light">
                 <div class="circle">+4</div>
-                <div class="label">PROFICIENCY</div>
+                <div class="prof-label">PROFICIENCY</div>
             </div>
-            <div class="statBlock">
-                <div class="label">
+            <div class="profBlock bg-light">
+                <div class="prof-label">
                     <div>PASSIVE</div>
                     <div>PERCEPTION</div>
                 </div>
                 <div class="circle">12</div>
             </div>
-            <div class="statBlock">
+            <div class="profBlock bg-light">
                 <div class="circle">2</div>
-                <div class="label">INSPIRATION</div>
+                <div class="prof-label">INSPIRATION</div>
             </div>
-            <div class="statBlock">
-                <div class="label">
+            <div class="profBlock bg-light">
+                <div class="prof-label">
                     <div>PASSIVE</div>
                     <div>INSIGHT</div>
                 </div>
@@ -60,50 +68,210 @@
         </div>
 
         <div class="mainAttributesCard">
-            <div class="stat">
-                <div class="statValue">
+
+            <!-- STRENGTH -->
+            <div class="stat"> 
+                <div class="statValue bg-light">
                     <div class="attributeName">STRENGTH</div>
+                    <div class="modifier">0</div>
+                    <div class="abilityScore">10</div>
+                </div>
+                <div class="skillChecks">
+                    <div class=""><input type="checkbox"> Saving Throws: +3</div>
+                    <div class=""><input type="checkbox"> Athletics: +3</div>
+                </div>
+            </div>
+
+            <!-- AGILITY -->
+            <div class="stat">
+                <div class="statValue bg-light">
+                    <div class="attributeName">AGILITY</div>
                     <div class="modifier">+3</div>
                     <div class="abilityScore">16</div>
                 </div>
                 <div class="skillChecks">
-                    <div class="">Saving Throw: +3</div>
-                    <div class="">Athletics: +3</div>
+                    <div class=""><input type="checkbox" > Saving Throws: +3</div>
+                    <div class=""><input type="checkbox" > Acrobatics: +3</div>
+                    <div class=""><input type="checkbox" > Sleight of Hand: +3</div>
+                    <div class=""><input type="checkbox" > Stealth: +3</div>
                 </div>
             </div>
 
-            <!-- <div class="">
-                <div class="">AGI: 14</div>
-                <div class="">Modifier: +2</div>
-                <div class="">Saving Throw: +2</div>
-                <div class="">Acrobatics: +2</div>
-                <div class="">Sleight of Hand: +2</div>
-                <div class="">Stealth: +2</div>
-            </div> -->
+            <!-- CONSTITUTION -->
+            <div class="stat">
+                <div class="statValue bg-light">
+                    <div class="attributeName">CONSTITUTION</div>
+                    <div class="modifier">+4</div>
+                    <div class="abilityScore">18</div>
+                </div>
+                <div class="skillChecks">
+                    <div class=""><input type="checkbox" > Saving Throws: +4</div>
+                </div>
+            </div>
+
+            <!-- INTELLIGENCE -->
+            <div class="stat">
+                <div class="statValue bg-light">
+                    <div class="attributeName">INTELLIGENCE</div>
+                    <div class="modifier">-1</div>
+                    <div class="abilityScore">8</div>
+                </div>
+                <div class="skillChecks">
+                    <div class=""><input type="checkbox" > Saving Throws: -1</div>
+                    <div class=""><input type="checkbox" > Arcana: -1</div>
+                    <div class=""><input type="checkbox" > History: -1</div>
+                    <div class=""><input type="checkbox" > Investigation: -1</div>
+                    <div class=""><input type="checkbox" > Nature: -1</div>
+                    <div class=""><input type="checkbox" > Religion: -1</div>
+                </div>
+            </div>
+
+            <!-- WISDOM -->
+            <div class="stat">
+                <div class="statValue bg-light">
+                    <div class="attributeName">WISDOM</div>
+                    <div class="modifier">+5</div>
+                    <div class="abilityScore">20</div>
+                </div>
+                <div class="skillChecks">
+                    <div class=""><input type="checkbox" > Saving Throws: +5</div>
+                    <div class=""><input type="checkbox" > Animal Handling: +5</div>
+                    <div class=""><input type="checkbox" > Insight: +5</div>
+                    <div class=""><input type="checkbox" > Medicine: +5</div>
+                    <div class=""><input type="checkbox" > Perception: +5</div>
+                    <div class=""><input type="checkbox" > Survival: +5</div>
+                </div>
+            </div>
+
+            <!-- CHARISMA -->
+            <div class="stat">
+                <div class="statValue bg-light">
+                    <div class="attributeName">CHARISMA</div>
+                    <div class="modifier">+5</div>
+                    <div class="abilityScore">20</div>
+                </div>
+                <div class="skillChecks">
+                    <div class=""><input type="checkbox" > Saving Throws: +5</div>
+                    <div class=""><input type="checkbox" > Deception: +5</div>
+                    <div class=""><input type="checkbox" > Intimidation: +5</div>
+                    <div class=""><input type="checkbox" > Performance: +5</div>
+                    <div class=""><input type="checkbox" > Persuation: +5</div>
+                </div>
+            </div>
+            
         </div>
+
+        <div class="traits"></div>
     </div>
 
+    <!-- Middle Card (HP, Weapons, Class Specifics) -->
     <div class="middleAttributesCard">
-        <div class="attribute">
-            <div class="">INT: -2</div>
-            <div class="">Modifier: -10</div>
+
+        <div class="combatStats">
+            <div class="row mb-4 firstRow">
+                <div class="col-4">
+                    <div class="p-3 border bg-light shield">
+                        <div class="shield-label">AC</div>
+                        <div class="shield-value">14</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="p-3 border bg-light initiative">
+                        <div class="initiative-label">Initiative</div>
+                        <div class="initiative-value">+3</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="p-3 border bg-light speed">
+                        <div class="initiative-label">Speed</div>
+                        <div class="initiative-value">50ft</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4 secondRow">
+                <div class="col-8">
+                    <div class="p-3 border bg-light HPCard divshadow">
+                        <div class="bg-light maxHP">85</div>
+                        <div class="bg-light maxHP-label">Hit Point Maximum</div>
+
+                        <div class="currentHPSection">
+                            <div class="currentHP-label">Current Hit Points</div>
+                            <div class="currentHP">30</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="p-3 pt-0 border bg-light tempHPSection divshadow">
+                        <div class="tempHP-label">Temporary <br> Hit Points</div>
+                        <div class="tempHP">5</div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4 thirdRow">
+                <div class="col-6">
+                    <div class="p-3 border bg-light divshadow hitdie">F
+
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 border bg-light divshadow deathsaves">G
+
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- <div class="attribute">
-            <div class="">Mpinies: 25</div>
-            <div class="">Modifier: +5</div>
-        </div> -->
+
+        <div class="weaponsCard bg-light divshadow">
+            <h4>WEAPONS</h4>
+            <p>Name</p>
+            <p>Atk Bonus</p>
+            <p>Damage</p>
+            <p>Type</p>
+
+            <div>Crossbow</div>
+            <div>+3</div>
+            <div>1d6 +5</div>
+            <div>Piercing</div>
+
+            <div>Rapier</div>
+            <div>+9</div>
+            <div>1d8 +7</div>
+            <div>Piercing</div>
+
+            <div>Dagger</div>
+            <div>+3</div>
+            <div>1d4 +4</div>
+            <div>Piercing</div>
+        </div>
+
+        <div class="charClassAbilities"></div>
+
     </div>
 
-    <div class="rightAttributesCard">
-        <div class="attribute">
-            <div class="">INT: -2</div>
-            <div class="">Modifier: -10</div>
-        </div>
+
+    <!-- Right Card (Class Skills)-->
+    <div class="rightAttributesCard" style="border: 2px solid black">
+        <div class="charClassFeatures"></div>
+
     </div>
 
 </div>
  
 
 
+
+    {#  Development (#dev) #}
+    {% if config['ENV'] == 'development' %}
+        <script type="module" src="http://localhost:5173/src/entry/characterPage.jsx"></script>
+    {% else %}
+    {#  Production (#prod) #}
+        <script
+            type="module"
+            src="{{ url_for('static', filename='js/character.js') }}">
+        </script>
+    {% endif %}
 
 {% endblock %}

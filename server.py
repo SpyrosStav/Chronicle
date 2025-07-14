@@ -46,7 +46,7 @@ def play():
 # Serve the character page
 @app.route("/characters")
 def characters_list():
-    return render_template("characterPage.html")
+    return render_template("characterPage.html", char = 3)
 
 # Serve the campaigns page
 @app.route("/campaigns")
