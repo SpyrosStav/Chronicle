@@ -29,7 +29,7 @@ footer {
     color: black !important;
 } */
 
-#content-wrap {     padding-top: 2.5rem;     padding-bottom: 2.5rem;    /* Footer height */ }
+#content-wrap {     padding-top: 20px;     padding-bottom: 20px;    /* Footer height */ }
 
 .title {    text-align: center; }
 

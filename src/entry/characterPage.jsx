@@ -16,8 +16,8 @@ import CharacterPage from '../pages/CharacterPage';
 // };
 
 const root  = document.getElementById('char-sheet-root');
-const charId  = root.dataset.charid;
+const domCharId = root.dataset.charid;
 
 ReactDOM.createRoot(root).render(
-  <CharacterPage charId={charId} />
+  <CharacterPage charId={domCharId} />
 );

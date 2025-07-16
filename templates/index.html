@@ -14,19 +14,5 @@
     {% endfor %}
 </div>
 
-
-<!-- <script>
-    fetch('/api/characters')
-        .then(response => response.json())
-        .then(data => {
-            const charactersDiv = document.getElementById('characters');
-            data.forEach(character => {
-                const characterDiv = document.createElement('div');
-                characterDiv.textContent = character.name;
-                charactersDiv.appendChild(characterDiv);
-            });
-        });
-</script> -->
-
 {% endblock %}
 

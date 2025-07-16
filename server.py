@@ -1,10 +1,21 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from dotenv import load_dotenv
 from datetime import timedelta
+from werkzeug.utils import secure_filename
 import pyodbc,os
+import json
+import uuid
 
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+
 load_dotenv("config.env")
+# --------------------------------------------------- STATIC DECLARATION --------------------------------------------------- #
+
+app.config['ENV'] = os.getenv('ENV', 'production')
+UPLOAD_FOLDER = 'static/images'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 # --------------------------------------------------- DB Connection --------------------------------------------------- #
 SERVER = os.getenv("SERVER")
@@ -16,7 +27,7 @@ def get_db_connection():
 
 # --------------------------------------------------- Login Handler --------------------------------------------------- #
 app.secret_key = os.getenv("SECRET_KEY")
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=1) # Set session to be permanent and expire after 1 hour
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=1)
 
 @app.route("/login", methods = ['GET','POST'])
 def login():
@@ -32,7 +43,8 @@ def login():
 def logout():
     session.pop("user_id", None)  # Remove user session
     return redirect(url_for("home"))  # Redirect to homepage
-# --------------------------------------------------- Pages Serving --------------------------------------------------- #
+
+# --------------------------------------------------- Template Rendering --------------------------------------------------- #
 # Serve the home page
 @app.route("/")
 def home():
@@ -44,9 +56,14 @@ def play():
     return render_template("play.html")
 
 # Serve the character page
-@app.route("/characters")
+@app.route("/character")
+def single_character():
+    return render_template("characterPage.html", char_id = 1)
+
+# Serve the character list page
+@app.route("/character")
 def characters_list():
-    return render_template("characterPage.html", char = 3)
+    return render_template("charactersListPage.html")
 
 # Serve the campaigns page
 @app.route("/campaigns")
@@ -59,19 +76,94 @@ def profile():
     return render_template("profile.html")
 
 # --------------------------------------------------- API Calls --------------------------------------------------- #
-# Get Characters
-@app.route("/api/characters", methods = ['GET']) 
-def get_characters():
-    characters = [
-        {'id': 1, 'name': 'Gandalf'},
-        {'id': 2, 'name': 'Frodo'},
-    ]
-    return jsonify(characters)
+# Get List of Characters
+# @app.route("/api/characters", methods = ['GET']) 
+# def get_characters():
+#     characters = [
+#         {'id': 1, 'name': 'Gandalf'},
+#         {'id': 2, 'name': 'Frodo'},
+#     ]
+#     return jsonify(characters)
 
 # Create New Character
-@app.route("/api/characters", methods = ['POST']) 
-def add_new_character():
-    return
+# @app.route("/api/characters", methods = ['POST']) 
+# def add_new_character():
+#     return
+
+@app.route('/api/update-character/<int:char_id>', methods=['POST'])
+def update_character(char_id):
+    character_data_raw = request.form.get('characterData')
+    character_data = json.loads(character_data_raw)
+    image_file = request.files.get('image')
+
+    if image_file:
+        # image_path = os.path.join('static/images/', image_file.filename)
+        ext = os.path.splitext(image_file.filename)[1]
+        unique_filename = f"{uuid.uuid4().hex}{ext}"
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+        image_file.save(image_path)
+    else:
+        image_path = character_data.get("profile_image_path")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""UPDATE dbo.Characters SET character_name = ?, level = ?, class = ?, subclass = ?, race = ?,
+                   background = ?, strength = ?, dexterity = ?, constitution = ?, intelligence = ?, wisdom = ?,
+                   charisma = ?, profile_image_path = ?
+                   WHERE character_id = ?""", 
+                   (    character_data['character_name'],
+                        character_data['level'],
+                        character_data['class'],
+                        character_data['subclass'],
+                        character_data['race'],
+                        character_data['background'],
+                        character_data['strength'],
+                        character_data['dexterity'],
+                        character_data['constitution'],
+                        character_data['intelligence'],
+                        character_data['wisdom'],
+                        character_data['charisma'],
+                        image_path,
+                        char_id
+                    )
+                )
+    conn.commit()
+
+    for skill_name, is_proficient in character_data["skills"].items():
+        print(is_proficient)
+        cursor.execute("""UPDATE cs 
+                        SET cs.isProficient = ?
+                        FROM Character_Skills as cs
+                        JOIN Skills as s ON cs.skill_id = s.skill_id
+                        WHERE character_id = ? and s.skill_name = ? """,str(is_proficient),char_id,skill_name)
+    cursor.close()
+    conn.close()
+    return {"message": "Character updated"}
+
+@app.route("/api/character/<int:char_id>", methods = ['GET'])
+def get_single_character(char_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""SELECT * FROM dbo.Characters WHERE character_id = ?""", (char_id,))
+    row = cursor.fetchone()
+
+    data = dict(zip([column[0] for column in cursor.description], row))
+
+    cursor.execute("""SELECT a.character_id, b.skill_name, a.isProficient 
+                        FROM Character_Skills as a
+                        JOIN Skills as b
+                        ON a.skill_id = b.skill_id
+                        WHERE character_id = ?""", (char_id,))
+    rows = cursor.fetchall()
+
+    data['skills'] = {row[1] : row[2] for row in rows}
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(data)
 
 # Get Profile Info
 @app.route("/api/profile", methods = ['GET'])

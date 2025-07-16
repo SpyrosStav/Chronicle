@@ -1,0 +1,13 @@
+input.levelBadge{
+    background-color: transparent !important;
+}
+/* Hide number input arrows (cross-browser) */
+input[type="number"].levelBadge::-webkit-inner-spin-button,
+input[type="number"].levelBadge::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number].levelBadge  {
+  -moz-appearance: textfield; /* Firefox */
+}

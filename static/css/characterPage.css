@@ -39,6 +39,17 @@ div {
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+/* ========== BUTTONS ========== */
+.editBtnsDiv{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-right: 20px;
+}
+.editBtnsDiv > .btn {
+    width: 75px;
+}
+
 /* ========== BASIC INFO CARD ========== */
 .basicInfoCard {
     display: flex;     
