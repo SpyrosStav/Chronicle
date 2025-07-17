@@ -1,23 +1,23 @@
 import { useMemo } from 'react';
 
 //Calculates modifiers for Stats, Skills, ST
-export function useModifier(attribute,proficiencyMod,isProficient) {
-    const modifier = useMemo(() => Math.floor((attribute - 10)/2) +proficiencyMod*isProficient, [attribute]);
-    let result;
+export function useAbiltyScoreModifier(attribute) {
+    const modifier = useMemo(() => Math.floor((attribute - 10)/2),  [attribute]);
+    return modifier
+}
 
-    if (modifier > 0){
-        result = `+${modifier}`;;
-    }
-    else {
-        result = `${modifier}`;
-    }
-
-    return result;
+export function useModifier(abiltyScoreModifier,proficiencyMod,isProficient) {
+    const modifier = useMemo(() => abiltyScoreModifier +proficiencyMod*isProficient, [abiltyScoreModifier, isProficient]);
+    return modifier
 }
 
 //Calculates Proficiency modifier
 export function useProficiencyModifier(level){
     const proficiencyModifier = useMemo(() => (Math.floor((level - 1) / 4) + 2));
-
     return proficiencyModifier
+}
+
+export function usePassiveModifier(value){
+    const passiveModifier = useMemo(() => value + 10, [value])
+    return passiveModifier
 }

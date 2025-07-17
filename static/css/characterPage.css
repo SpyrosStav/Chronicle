@@ -1,5 +1,5 @@
 /* ========== UTILITY CLASSES ========== */
-div {
+div, input.maxHP {
     border-radius: 15px;
 }
 
@@ -183,7 +183,7 @@ div {
 }
 
 /* ========== ATTRIBUTE STATS ========== */
-.mainAttributesCard {
+.AbilityScoresCard {
     padding: 0% 10%;
 }
 
@@ -191,7 +191,7 @@ div {
     display: flex;
 }
 
-.mainAttributesCard > div > div{
+.AbilityScoresCard > div > div{
     margin: 10px;
 }
 
@@ -241,7 +241,7 @@ div {
 
 /* ========== Combat Stats ========== */
 .firstRow > div > div {
-    min-height: 100px;
+    min-height: 120px;
     text-align: center;
     padding-top: 0;
     position: relative;
@@ -259,9 +259,16 @@ div {
     font-size: 1.2em;
 }
 
-.firstRow > div > div :nth-child(2){
+.firstRow > div > div :nth-child(2),
+.firstRow > div > div input{
     font-size: 3em;
     font-weight: bold;
+}
+
+.shield-value,.initiative-value {
+    width: 80px;
+    max-width: 100%;
+    text-align: center;
 }
 
 .secondRow > div > div {
@@ -275,17 +282,17 @@ div {
   height: 140px;
 }
 
-.maxHP {
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    width: 70px;
-    height: 70px;
-    text-align: center;
-    line-height: 65px;
-    font-size: 1.7em;
-    border: 2px solid black;
-    z-index: 1;
+.maxHP, input.maxHP {
+    position: absolute !important;
+    top: -10px !important;
+    left: -10px !important;
+    width: 70px !important;
+    height: 70px !important;
+    text-align: center !important;
+    line-height: 65px !important;
+    font-size: 1.7em !important;
+    border: 2px solid black !important;
+    z-index: 1 !important;
 }
 
 .maxHP-label {
@@ -317,8 +324,20 @@ div {
     text-align: center;
 }
 
-.thirdRow > div > div {
+.currentHP {
+    width: 100px;
+}
+
+.thirdRow > div > div, 
+.thirdRow > div > input{
     min-height: 70px;
+}
+
+.tempHPSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .tempHP-label{

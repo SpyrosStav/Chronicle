@@ -1,6 +1,12 @@
 input.levelBadge{
     background-color: transparent !important;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+    pointer-events: auto;
+}
 /* Hide number input arrows (cross-browser) */
 input[type="number"].levelBadge::-webkit-inner-spin-button,
 input[type="number"].levelBadge::-webkit-outer-spin-button {
@@ -10,4 +16,13 @@ input[type="number"].levelBadge::-webkit-outer-spin-button {
 
 input[type=number].levelBadge  {
   -moz-appearance: textfield; /* Firefox */
+}
+
+input[type="number"] {
+  box-sizing: border-box;
+  outline: none;
+}
+
+.initiative-value{
+  border: none;
 }

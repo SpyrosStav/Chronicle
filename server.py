@@ -90,6 +90,34 @@ def profile():
 # def add_new_character():
 #     return
 
+# --------------- FETCH CHARACTER ---------------
+@app.route("/api/character/<int:char_id>", methods = ['GET'])
+def get_single_character(char_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Fetch Character Data
+    cursor.execute("""SELECT * FROM dbo.Characters WHERE character_id = ?""", (char_id,))
+    row = cursor.fetchone()
+
+    data = dict(zip([column[0] for column in cursor.description], row))
+
+    # Fetch Skill Proficiencies
+    cursor.execute("""SELECT a.character_id, b.skill_name, a.isProficient 
+                        FROM Character_Skills as a
+                        JOIN Skills as b
+                        ON a.skill_id = b.skill_id
+                        WHERE character_id = ?""", (char_id,))
+    rows = cursor.fetchall()
+
+    data['skills'] = {row[1] : row[2] for row in rows}
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(data)
+
+# --------------- UPDATE CHARACTER ---------------
 @app.route('/api/update-character/<int:char_id>', methods=['POST'])
 def update_character(char_id):
     character_data_raw = request.form.get('characterData')
@@ -110,60 +138,29 @@ def update_character(char_id):
 
     cursor.execute("""UPDATE dbo.Characters SET character_name = ?, level = ?, class = ?, subclass = ?, race = ?,
                    background = ?, strength = ?, dexterity = ?, constitution = ?, intelligence = ?, wisdom = ?,
-                   charisma = ?, profile_image_path = ?
+                   charisma = ?, max_hp = ?, c_hp = ?, temp_hp = ?, ac = ?, speed = ?, inspiration = ?, profile_image_path = ?
                    WHERE character_id = ?""", 
-                   (    character_data['character_name'],
-                        character_data['level'],
-                        character_data['class'],
-                        character_data['subclass'],
-                        character_data['race'],
-                        character_data['background'],
-                        character_data['strength'],
-                        character_data['dexterity'],
-                        character_data['constitution'],
-                        character_data['intelligence'],
-                        character_data['wisdom'],
-                        character_data['charisma'],
+                   (    character_data['character_name'], character_data['level'], character_data['class'], character_data['subclass'],
+                        character_data['race'], character_data['background'],
+                        character_data['strength'], character_data['dexterity'], character_data['constitution'],
+                        character_data['intelligence'], character_data['wisdom'], character_data['charisma'],
+                        character_data['max_hp'],character_data['c_hp'],character_data['temp_hp'],
+                        character_data['ac'],character_data['speed'],character_data['inspiration'],
                         image_path,
                         char_id
-                    )
-                )
-    conn.commit()
+                    ))
 
     for skill_name, is_proficient in character_data["skills"].items():
-        print(is_proficient)
         cursor.execute("""UPDATE cs 
                         SET cs.isProficient = ?
                         FROM Character_Skills as cs
                         JOIN Skills as s ON cs.skill_id = s.skill_id
-                        WHERE character_id = ? and s.skill_name = ? """,str(is_proficient),char_id,skill_name)
+                        WHERE character_id = ? and s.skill_name = ? """,(is_proficient,char_id,skill_name))
+        
+    conn.commit()
     cursor.close()
     conn.close()
     return {"message": "Character updated"}
-
-@app.route("/api/character/<int:char_id>", methods = ['GET'])
-def get_single_character(char_id):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""SELECT * FROM dbo.Characters WHERE character_id = ?""", (char_id,))
-    row = cursor.fetchone()
-
-    data = dict(zip([column[0] for column in cursor.description], row))
-
-    cursor.execute("""SELECT a.character_id, b.skill_name, a.isProficient 
-                        FROM Character_Skills as a
-                        JOIN Skills as b
-                        ON a.skill_id = b.skill_id
-                        WHERE character_id = ?""", (char_id,))
-    rows = cursor.fetchall()
-
-    data['skills'] = {row[1] : row[2] for row in rows}
-
-    cursor.close()
-    conn.close()
-
-    return jsonify(data)
 
 # Get Profile Info
 @app.route("/api/profile", methods = ['GET'])
@@ -184,28 +181,6 @@ def fetch_profile():
     conn.close()
 
     return jsonify(player_info), 200
-
-@app.route("/api/test") # Simple test query
-def test_connection():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT name,email FROM dbo.Players")  
-        rows = cursor.fetchall()
-
-        players = []
-        for row in rows:
-            players.append({
-                "player name" : row[0],
-                "player email" : row[1],
-            })
-
-        cursor.close()
-        conn.close()
-        return jsonify(players), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 # --------------------------------------------------- MAIN --------------------------------------------------- #
 if __name__ == "__main__":
