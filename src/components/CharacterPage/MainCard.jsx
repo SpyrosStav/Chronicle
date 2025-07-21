@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useAbiltyScoreModifier,useModifier,useProficiencyModifier, usePassiveModifier } from '../hooks/useModifier';
+import { useAbiltyScoreModifier,useModifier,useProficiencyModifier, usePassiveModifier } from '../../hooks/useModifier';
 import { AbilityScoreSection, SkillSection } from './StatSection';
 
 function MainCard({char, onStatChange, isEditing}){
@@ -7,7 +7,6 @@ function MainCard({char, onStatChange, isEditing}){
     // PROFICIENCY MODIFIER
     const proficiencyModifier = useProficiencyModifier(char.level);
 
-    
     // MAIN STATS MODIFIERS
     const strengthModifier = useAbiltyScoreModifier(char.strength,proficiencyModifier);
     const dexterityModifier = useAbiltyScoreModifier(char.dexterity,proficiencyModifier);
@@ -331,7 +330,7 @@ function MainCard({char, onStatChange, isEditing}){
         </div>
 
         {/* FREE TEXT CARD FOR CLASS SKILLS */}
-        <div className="rightAttributesCard" style={{border: '2px solid black'}}>
+        <div className="rightAttributesCard" >
             <div className="charclassFeatures"></div>
         </div>
     </div>

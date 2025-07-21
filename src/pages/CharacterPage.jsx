@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import useCharacterData from '../hooks/useCharacterData';
-import BasicInfoCard   from '../components/BasicInfoCard';
-import MainCard from '../components/MainCard'
+import BasicInfoCard   from '../components/CharacterPage/BasicInfoCard';
+import MainCard from '../components/CharacterPage/MainCard'
 
 
 export default function CharacterPage({charId}) {
@@ -13,6 +13,7 @@ export default function CharacterPage({charId}) {
     const [editableStats, setEditableStats] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
     useEffect(() => {
       if (char) {
@@ -24,10 +25,16 @@ export default function CharacterPage({charId}) {
           ...char,
           skills: char.skills || {} 
         });
+
+        const bgWrapper = document.getElementById("content-wrap");
+        if (bgWrapper) {
+          bgWrapper.classList.remove("bg-loading");
+          bgWrapper.classList.add("bg-loaded");
+        }
       }
     }, [char]);
 
-    if (loading) return <p>Loading…</p>;
+    if (loading) return null;
     if (error)   return <p>Error: {error}</p>;
     if (!editableStats) return null;
 
@@ -38,6 +45,7 @@ export default function CharacterPage({charId}) {
       }));
     };
 
+    // IMAGE CHANGE
     const handleImageChange = (e) => { 
       const file = e.target.files[0];
       if (file) {
@@ -45,26 +53,28 @@ export default function CharacterPage({charId}) {
 
         const reader = new FileReader();
         reader.onloadend = () => {
-          setEditableStats((prev) => ({
-            ...prev,
-            profile_image_path: reader.result,
-          }));
+          setImagePreviewUrl(reader.result);
         };
         reader.readAsDataURL(file);
 
-        setEditableStats((prev) => ({
-            ...prev,
-            profile_image_path: file.name,
-          }));
+        // handleStatChange('profile_image_path', reader.result)
       }
     };
 
+    // HANDLE SAVING
     const handleSave = async () => {
       const formData = new FormData();
       formData.append("characterData", JSON.stringify(editableStats));
 
       if (selectedImage) {
         formData.append("image", selectedImage);
+      }
+      
+      if (selectedImage && imagePreviewUrl) {
+        setEditableStats((prev) => ({
+          ...prev,
+          profile_image_path: imagePreviewUrl,
+        }));
       }
 
       try {
@@ -73,10 +83,17 @@ export default function CharacterPage({charId}) {
           body: formData,
         });
 
+
         if (response.ok) {
           console.log("Character updated successfully!");
+          const updated_image_path = await response.json();
+          // setEditableStats((prev) => ({
+          //     ...prev,
+          //     profile_image_path: updated_image_path,
+          // }));
         }
-      } catch (error) {
+      } 
+      catch (error) {
         console.error("Error updating character:", error);
       }
     };
@@ -84,24 +101,25 @@ export default function CharacterPage({charId}) {
     const handleCancel = () => {
       setEditableStats(originalStats);
       setIsEditing(false);
+      setImagePreviewUrl(null);
     }
 
   return (
     <>
-    <div className='editBtnsDiv'>
-      {isEditing ?
-        ( <>
-            <button className='btn btn-light divshadow' onClick={() => {
-              handleSave();
-              setIsEditing(!isEditing);
-            }}> Save </button>
-            <button className='btn btn-light divshadow' onClick={handleCancel}> Cancel </button>
-          </>) : 
-        (<button className='btn btn-light divshadow' onClick={() => setIsEditing(!isEditing)}> Edit </button>)
-        }
-    </div>
+      <div className='editBtnsDiv'>
+        {isEditing ?
+          (<>
+              <button className=' divshadow medieval-button' onClick={() => {
+                handleSave();
+                setIsEditing(!isEditing);
+              }}> Save </button>
+              <button className=' divshadow medieval-button' onClick={handleCancel}> Cancel </button>
+            </>) : 
+          (<button className=' divshadow medieval-button' onClick={() => setIsEditing(!isEditing)}> Edit </button>)
+          }
+      </div>
 
-      <BasicInfoCard char={editableStats} onStatChange={handleStatChange} isEditing={isEditing} onImageChange={handleImageChange}/>
+      <BasicInfoCard char={editableStats} onStatChange={handleStatChange} isEditing={isEditing} imagePreviewUrl = {imagePreviewUrl} onImageChange={handleImageChange}/>
       <MainCard char={editableStats} onStatChange={handleStatChange} isEditing={isEditing}/>
     </>
   );

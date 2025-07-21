@@ -1,3 +1,7 @@
+body{
+    font-family: 'Caudex';
+}
+
 #page-container {
     background-color: #a57641;
     color: black;
@@ -5,17 +9,18 @@
     position: relative;
 }
 
-.navbar { background-color: #4B2E1E; }
+.navbar { 
+    background-color: #4B2E1E;
+    background-size:70% 3px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
 
-.navbar-brand { color: #c2a067; }
-
-.nav-item{ color: #c2a067 !important; }
-
-.nav-link { color: #c2a067 !important; }
-
-.nav-link:hover { color: #e7c891 !important; }
-
-.navbar-brand:hover { color: #e7c891 !important; }
+/* .nav-item,.nav-link, .navbar-brand{ color: black !important; }
+.nav-link:hover,.navbar-brand:hover { color: #20201e !important; } */
+.nav-item,.nav-link, .navbar-brand{ color: #c2a067 !important; }
+.nav-link:hover,.navbar-brand:hover { color: #e7c891 !important; }
 
 footer {
     display: flex;
@@ -25,13 +30,27 @@ footer {
     width: 100%;
 }
 
-/* .navbar-custom-text .dropdown-menu .dropdown-item {
-    color: black !important;
+#content-wrap {     
+    padding-top: 20px;     
+    padding-bottom: 40px;
+    border-radius: 0px;
+}
+
+/* .bg-loading {
+    background: none !important;
 } */
 
-#content-wrap {     padding-top: 20px;     padding-bottom: 20px;    /* Footer height */ }
+.bg-loaded {
+    background-image: url("/static/images/background-image.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: relative;
+}
 
-.title {    text-align: center; }
+.title { 
+    text-align: center; 
+}
 
 footer{
     height: 2.5rem;

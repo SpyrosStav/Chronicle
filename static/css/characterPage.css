@@ -269,6 +269,7 @@ div, input.maxHP {
     width: 80px;
     max-width: 100%;
     text-align: center;
+    margin-top: 5px;
 }
 
 .secondRow > div > div {

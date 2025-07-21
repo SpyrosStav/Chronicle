@@ -7,7 +7,7 @@ export function useAbiltyScoreModifier(attribute) {
 }
 
 export function useModifier(abiltyScoreModifier,proficiencyMod,isProficient) {
-    const modifier = useMemo(() => abiltyScoreModifier +proficiencyMod*isProficient, [abiltyScoreModifier, isProficient]);
+    const modifier = useMemo(() => abiltyScoreModifier +proficiencyMod*isProficient, [abiltyScoreModifier, proficiencyMod, isProficient]);
     return modifier
 }
 

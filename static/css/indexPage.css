@@ -1,0 +1,8 @@
+#content-wrap {
+    background-image: url("/static/images/dashboardImage.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: relative;
+    min-height: 100vh;
+}

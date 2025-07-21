@@ -1,21 +1,20 @@
-from flask import Flask, render_template, jsonify, request, session, redirect, url_for
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for, flash
 from dotenv import load_dotenv
 from datetime import timedelta
+from functools import wraps
 from werkzeug.utils import secure_filename
-import pyodbc,os
-import json
-import uuid
+from backend.auth.pwd_hash import hash_password, verify_password
+from backend.auth.register import checkRegisterError
+import pyodbc,os,json,uuid,bcrypt,re
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 
 load_dotenv("config.env")
 # --------------------------------------------------- STATIC DECLARATION --------------------------------------------------- #
-
 app.config['ENV'] = os.getenv('ENV', 'production')
 UPLOAD_FOLDER = 'static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 
 # --------------------------------------------------- DB Connection --------------------------------------------------- #
 SERVER = os.getenv("SERVER")
@@ -25,23 +24,83 @@ CONN_STR = f'DRIVER={DRIVER};SERVER={SERVER};DATABASE={DATABASE};Trusted_Connect
 def get_db_connection():
     return pyodbc.connect(CONN_STR)
 
+# --------------------------------------------------- Decorators --------------------------------------------------- #
+@app.context_processor
+def inject_user():
+    return dict(username=session.get("username"))
+
 # --------------------------------------------------- Login Handler --------------------------------------------------- #
 app.secret_key = os.getenv("SECRET_KEY")
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=1)
 
-@app.route("/login", methods = ['GET','POST'])
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            flash("You must be logged in to access this page.")
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# Register
+@app.route("/register", methods = ['POST'])
+def register():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    username = request.form["username"]
+    email = request.form["email"]
+    password = request.form["password"]
+    hashed_password = hash_password(password)
+    
+
+    try:
+        cursor.execute("""INSERT INTO Players (username,email,player_password)
+                       VALUES (?,?,?)""", (username,email,hashed_password))
+        conn.commit()
+
+    except pyodbc.IntegrityError as e:
+        cursor.close()
+        conn.close()
+        takenField = checkRegisterError(str(e))
+        return jsonify({'status' : 'failure', 'message' : f'{takenField} already exists'})
+    
+    cursor.close()
+    conn.close()
+    session["username"] = username
+    session["email"] = email
+    session.permanent = True 
+    return jsonify({'status' : 'success', 'message' : 'Register Successful!'})
+
+# Login
+@app.route("/login", methods = ['POST'])
 def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        test = username + " " + password
-        session["user_id"] = username
-        session.permanent = True
-    return render_template("index.html",test = test)
+    username = request.form["username"]
+    password = request.form["password"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""SELECT player_password, email FROM Players where username = ?""", username)
+    row = cursor.fetchone()
+
+    if(row):
+        if(verify_password(row[0], password)):
+            session["username"] = username
+            session["email"] = row[1]
+            session.permanent = True
+            return jsonify({'status' : 'success', 'message' : 'Login Successful'})
+        else:
+            cursor.close()
+            conn.close()
+            return jsonify({'status' : 'failure', 'message' : 'Wrong Password'})
+    else:
+        cursor.close()
+        conn.close()
+        return jsonify({'status' : 'failure', 'message' : 'Username does not exist'})
 
 @app.route("/logout")
 def logout():
-    session.pop("user_id", None)  # Remove user session
+    session.pop("username", None)  # Remove user session
     return redirect(url_for("home"))  # Redirect to homepage
 
 # --------------------------------------------------- Template Rendering --------------------------------------------------- #
@@ -57,6 +116,7 @@ def play():
 
 # Serve the character page
 @app.route("/character")
+# @login_required
 def single_character():
     return render_template("characterPage.html", char_id = 1)
 
@@ -76,19 +136,6 @@ def profile():
     return render_template("profile.html")
 
 # --------------------------------------------------- API Calls --------------------------------------------------- #
-# Get List of Characters
-# @app.route("/api/characters", methods = ['GET']) 
-# def get_characters():
-#     characters = [
-#         {'id': 1, 'name': 'Gandalf'},
-#         {'id': 2, 'name': 'Frodo'},
-#     ]
-#     return jsonify(characters)
-
-# Create New Character
-# @app.route("/api/characters", methods = ['POST']) 
-# def add_new_character():
-#     return
 
 # --------------- FETCH CHARACTER ---------------
 @app.route("/api/character/<int:char_id>", methods = ['GET'])
@@ -116,6 +163,12 @@ def get_single_character(char_id):
     conn.close()
 
     return jsonify(data)
+
+# --------------- CREATE CHARACTER ---------------
+@app.route('/api/create-character/', methods = ['POST'])
+def create_character(player_id):
+    return
+
 
 # --------------- UPDATE CHARACTER ---------------
 @app.route('/api/update-character/<int:char_id>', methods=['POST'])
@@ -160,7 +213,7 @@ def update_character(char_id):
     conn.commit()
     cursor.close()
     conn.close()
-    return {"message": "Character updated"}
+    return jsonify(image_path), 200
 
 # Get Profile Info
 @app.route("/api/profile", methods = ['GET'])

@@ -1,4 +1,5 @@
 config.env
-password_protection_hash.py
 gptcode.py
 gptcode.js
+flask_react_hosting_guide.md
+Pending.txt
