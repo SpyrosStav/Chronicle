@@ -1,0 +1,438 @@
+/* --------------------------------------- UTILITY CLASSES --------------------------------------- */
+div, input.maxHP {
+    border-radius: 15px;
+}
+
+input {
+    background: transparent;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-base {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
+.inline {   
+    display: inline-block; 
+    margin-right: 10px;
+}
+
+.backgroundCard {
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.45);
+    background: rgba(20, 20, 20, 0.20);
+    backdrop-filter: blur(2px);
+    border: 3px solid #4731106e;
+}
+
+.lightBackground{
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.45);
+    /* background: rgba(231, 214, 214, 0.3); */
+    /* backdrop-filter: blur(2px); */
+    /* border: 3px solid #4731106e; */
+}
+
+.bg-loaded {
+    background-image: url("/static/images/backgroundImages/characterSheetBackground.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    padding-top: 40px;
+}
+
+
+/* --------------------------------------- BUTTONS --------------------------------------- */
+.editBtnsDiv{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-right: 20px;
+}
+.editBtnsDiv > .btn {
+    width: 75px;
+}
+
+/* --------------------------------------- MAIN COLUMNS --------------------------------------- */
+.leftAttributesCard {
+    flex: 1;
+    margin: 10px;
+    margin-left: 40px;
+}
+
+.middleAttributesCard {
+    flex: 1.5;
+    margin: 10px;
+}
+
+.rightAttributesCard {
+    flex: 2;
+    margin: 10px;
+    margin-right: 20px;
+}
+
+/* --------------------------------------- BASIC INFO CARD --------------------------------------- */
+.basicInfoCard {
+    display: flex;     
+    align-items: center;
+    gap: 10px; 
+    padding-bottom: 20px;
+}
+
+.charImageWrapper{ 
+    position: relative;
+    margin-left: 8%;
+    margin-top: 3%;
+    width: 20%; 
+    max-width: 200px;
+}
+
+.charImageWrapper img{ 
+    height: 200px; 
+    width: 200px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    aspect-ratio: 1 / 1; 
+    display: block; 
+}
+
+.levelBadge{
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    font-size: 2em;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+}
+
+.charName { 
+    padding: 0px 30px; 
+    box-sizing: border-box;
+    text-shadow: 3px 3px 5px #926019ff;
+    font-weight: 500;
+}
+
+.className {  
+    font-size: 25px; 
+}
+
+.charInfo > div {     
+    width: 50%;    
+    box-sizing: border-box;    
+    padding: 0px 30px;
+    font-size: 1.2em;
+}
+
+.label{
+    font-weight: bold;
+    color: #462c05;
+    margin-right: 4px;
+}
+
+.classInfo {     
+    padding: 0px 30px; 
+}
+
+.subclassInfo {    
+    display: flex;     
+    align-items: center;     
+    justify-content: center; 
+}
+
+.attributesCard {    
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+}
+
+/* --------------------------------------- PROFICIENCY STATS --------------------------------------- */
+
+.profAttributes{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 5px;
+    justify-items: center;
+    padding: 0px 50px;
+    margin-bottom: 20px;
+}
+
+.profBlock {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 4px 8px;
+    position: relative;
+    box-sizing: border-box;
+    width: 220px; 
+    /* box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+}
+
+.profAttributes > :nth-child(even) {
+    justify-content: flex-end;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+/* .circle:hover {
+    background-color: #e0e0ff;
+    cursor: pointer;
+    border-color: #6666ff;
+} */
+
+.prof-label{
+    text-align: center;
+    flex: 1;
+}
+
+/* --------------------------------------- ATTRIBUTE STATS --------------------------------------- */
+.AbilityScoresCard {
+    padding: 0% 10%;
+}
+
+.stat {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.statValue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 33%;
+    /* border: 2px solid black; */
+    margin: auto;
+    margin: 10px;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);   
+}
+
+.skillChecks{
+    width: 75%;
+    padding-left: 30px;
+    border-top: 2px solid black;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.attributeName {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.modifier {
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+}
+
+.abilityScore {
+    font-size: 1.3em;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    line-height: 35px;
+    margin-bottom: 5px;
+}
+
+/* --------------------------------------- AC - INITIATIVE - SPEED --------------------------------------- */
+.combatStats {
+    padding: 10px;
+}
+
+.shield,.initiative,.speed {
+    min-height: 120px;
+    text-align: center;
+    padding-top: 0;
+    position: relative;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+}
+
+
+
+.shield-value,.initiative-value, .speed-value,
+input.shield-value,input.speed-value {
+    width: 80px;
+    max-width: 100%;
+    text-align: center;
+    font-size: 3em;
+    font-weight: bold;
+    /* margin-bottom: 5px; */
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.shield-label,.initiative-label,.speed-label{
+    font-size: 1.2rem;
+}
+/* --------------------------------------- HP CARD --------------------------------------- */
+.HPCard {
+    position: relative;
+    height: 140px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.hpRow > div > div {
+    min-height: 140px;
+    position: relative;
+}
+
+.maxHP, .currentHP, .tempHP,
+input.maxHP, input.currentHP, input.tempHP {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    vertical-align: middle;
+    padding: 0;
+    margin: 0;
+    min-height: 50px;
+
+}
+
+.currentHPSection,.maxHPSection,.tempHPSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; 
+}
+
+.maxHP-label,.currentHP-label,.tempHP-label{
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.hitDie, .deathSaves,
+input.hitDie, input.deathSaves{
+    min-height: 70px;
+}
+
+.number-input-wrapper-hp {
+    position: relative; 
+    width: 60px;
+}
+
+/* --------------------------------------- HIT DICE - DEATH SAVES --------------------------------------- */
+.hitDice, .deathSaves {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.hitDice-label,.deathSaves-label{
+    width: 100%;
+    text-align: center;
+    font-size: 1.4rem;
+    max-height: fit-content;
+}
+
+.hitDiceContainer,.deathSavesContainer{
+    display: flex;
+    min-height: 80px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.hitDiceContainer > div {
+    width: 45%;
+    height: 100%;
+    text-align: center;
+}
+
+.hitDiceContainer span {
+    font-size: 1.2em;
+}
+
+.hitDiceContainer > div > div{
+    margin-top: auto;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* --------------------------------------- WEAPONS CARD --------------------------------------- */
+.weaponsCard {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr;
+    padding: 5px;
+}
+
+.weaponsCard > p {
+    height: max-content;
+    padding-left: 5px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid black;
+}
+
+.weaponsCard > div {
+    margin: 0px 5px 10px 5px;
+    padding-left: 5px;
+    font-size: 1.4em;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.weapons-label{
+    grid-column: 1/-1;
+    margin: 0 0 8px 0;
+    text-align: center;
+    justify-self: center;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.weaponsCard > * { 
+    text-align: center;
+}

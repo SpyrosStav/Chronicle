@@ -3,15 +3,14 @@
 {% block title %}A&M - Characters List{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/inputStyling.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/characterPage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/characterListPage.css') }}">
 {% endblock %}
 
 
-<!-- MAIN BODY -->
+<!------------------------------------- MAIN BODY ------------------------------------->
 {% block content %}
-<div id="char-sheet-root" data-charid="{{char_id}}"></div>
- 
+<div id="char-list-root" data-username="{{username}}"></div>
+
     {#  Development (#dev) #}
     {% if config['ENV'] == 'development' %}
         <script type="module" src="http://192.168.1.202:5173/@vite/client"></script>
@@ -22,10 +21,10 @@
             window.$RefreshSig$ = () => (type) => type
             window.__vite_plugin_react_preamble_installed__ = true
         </script>
-        <script type="module" src="http://192.168.1.202:5173/src/entry/characterPage.jsx"></script>
+        <script type="module" src="http://192.168.1.202:5173/src/entry/characterListPage.jsx"></script>
     {% else %}
     {#  Production (#prod) #}
-        <script type="module" src="{{ url_for('static', filename='js/character.js') }}"></script>
+        <!-- <script type="module" src="{{ url_for('static', filename='js/character.js') }}"></script> -->
     {% endif %}
 
 {% endblock %}

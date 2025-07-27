@@ -1,0 +1,118 @@
+.bg-loaded {
+    background-image: url("/static/images/backgroundImages/characterListBackground.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: scroll;
+    min-height: calc(100vh - 5rem);
+}
+
+.backgroundCard {
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.30), 0 6px 20px 0 rgba(0, 0, 0, 0.45);
+    background: rgba(20, 20, 20, 0.20);
+    backdrop-filter: blur(2px);
+    border: 3px solid #4731106e;
+}
+
+.createCharBtn {
+    display: block;
+    margin: 20px auto;
+    font-size: 1.5em;
+    transition: transform 0.5s ease, box-shadow 0.3s ease;;
+
+}
+
+.createCharBtn:hover {
+    transform: scale(1.2);
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.30), 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+.createCharBtn:focus{
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.30), 0 6px 20px 0 rgba(0, 0, 0, 0.45);;
+}
+
+.mainListCard {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px;
+    gap: 30px;
+    padding: 10px 120px 70px 120px;
+}
+
+.characterCard {
+    display: flex;
+    margin: 10px 0px;
+    align-content: space-between;
+    border-radius: 15px;
+    min-width: 33%;
+    max-width: fit-content;
+    min-height: 17vh;
+    border: 3px solid #4731106e;
+    padding: 10px;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.30), 0 6px 20px 0 rgba(0, 0, 0, 0.45);
+    background: rgba(20,20, 20, 0.2);
+    backdrop-filter: blur(2px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.characterCard:hover {
+    transform: translateY(-15px);
+    /* transform: scale(1.03); */
+    border-color: #5838086e;
+    box-shadow: 0 12px 25px 0 rgba(0, 0, 0, 0.30), 0 15px 33px 0 rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.charImageWrapper img{ 
+    height: 250px; 
+    width: 150px;  
+    object-fit: cover; 
+    aspect-ratio: 1 / 1; 
+    display: block; 
+}
+
+.basicStats {
+    margin-left: 5px;
+    padding: 5px 10px 5px 10px;
+    width: 100%;
+}
+
+.charName {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 5px;
+    /* border-bottom: 2px solid #4731106e; */
+}
+
+.classInfo {
+    font-size: 1.3em;
+    font-weight: 400;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+
+.abilityScores {
+    display: flex;
+    flex-direction: column;
+}
+
+.singleAbiltyScore{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 25px;
+    align-items: stretch;
+}
+
+.label {
+    font-weight: bold;
+    color: #774a06;
+    margin-right: 4px;
+}

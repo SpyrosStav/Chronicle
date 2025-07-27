@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
+import { incrementValue, decrementValue} from '../../utils/inputHandler.js';
 
 // -- BASIC INFO CARD (Name, Race, Class etc) --
 function BasicInfoCard ({char, onStatChange, isEditing, imagePreviewUrl, onImageChange}) {
+
+    const inputRefLevel = useRef(null);
 
     return(
         <div className="basicInfoCard">
@@ -16,9 +19,17 @@ function BasicInfoCard ({char, onStatChange, isEditing, imagePreviewUrl, onImage
                     )}
                 </div>
                 {isEditing ? 
-                    (<input type="number" min={1} max={20} className="levelBadge" value={char.level}
-                        onChange={(e) => onStatChange('level', parseInt(e.target.value))}
-                        autoFocus/>) : 
+                    (<>
+                        <input type="number" ref={inputRefLevel} value={char.level}
+                            min={1} max={20} 
+                            className="levelBadge" id='custom-number'
+                            onChange={(e) => onStatChange('level', parseInt(e.target.value))}
+                            autoFocus/>
+                        <div className="spinner-buttons level-spinner-buttons">
+                            <button className='up' onClick={() => {incrementValue('level',inputRefLevel,onStatChange)}}></button>
+                            <button className='down' onClick={() => {decrementValue('level',inputRefLevel,onStatChange)}}></button>
+                        </div>
+                    </>) : 
                     (<div className="levelBadge">{char.level}</div>)
                 }
             </div>
@@ -30,8 +41,8 @@ function BasicInfoCard ({char, onStatChange, isEditing, imagePreviewUrl, onImage
                 </div>
                 
                 <div className="charInfo">
-                    <div data-name="race">Race: {char.race}</div>
-                    <div data-name="background">Background: {char.background}</div>
+                    <div data-name="race"><span className='label'>Race:</span> {char.race}</div>
+                    <div data-name="background"><span className='label'>Background:</span> {char.background}</div>
 
                 </div>
             </div>

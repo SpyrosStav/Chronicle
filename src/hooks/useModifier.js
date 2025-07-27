@@ -13,7 +13,7 @@ export function useModifier(abiltyScoreModifier,proficiencyMod,isProficient) {
 
 //Calculates Proficiency modifier
 export function useProficiencyModifier(level){
-    const proficiencyModifier = useMemo(() => (Math.floor((level - 1) / 4) + 2));
+    const proficiencyModifier = useMemo(() => (Math.floor((level - 1) / 4) + 2),[level]);
     return proficiencyModifier
 }
 

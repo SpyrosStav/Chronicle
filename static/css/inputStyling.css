@@ -1,25 +1,19 @@
-input.levelBadge{
-    background-color: transparent !important;
-}
-
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    opacity: 1;
-    pointer-events: auto;
-}
-/* Hide number input arrows (cross-browser) */
-input[type="number"].levelBadge::-webkit-inner-spin-button,
-input[type="number"].levelBadge::-webkit-outer-spin-button {
   -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number].levelBadge  {
-  -moz-appearance: textfield; /* Firefox */
+  margin: 0px;
 }
 
 input[type="number"] {
-  box-sizing: border-box;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  outline: none;
+  padding: 0;
+  padding-block: 0;
+  padding-inline: 0;
+}
+
+input[type="number"]:hover {
   outline: none;
 }
 
@@ -28,25 +22,71 @@ input[type="number"] {
 }
 
 .medieval-button {
-    padding: 10px 30px;
-    background-color: #795649; /* A dark wood-like brown */
-    color: #f4e5c3; /* A parchment-like off-white */
-    border: 2px solid #c0a080; /* A lighter brown border */
-    /*font-family: 'Goudy Bookletter 1911', serif;  A font with an old-style feel */
-    font-size: 18px;
-    text-shadow: 1px 1px 0px #a67c52; /* Gives a bit of depth to the text */
-    box-shadow: 2px 2px 0px #a67c52; /* Simulates an inset look */
-    border-radius: 4px; /* Slightly rounded corners */
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .medieval-button:hover {
-    background-color: #8a6e2f; /* A lighter, worn wood color for hover */
-    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.3); /* A more pronounced shadow for hover */
-  }
-  
-  .medieval-button:active {
-    box-shadow: inset 1px 1px 2px 0px rgba(0, 0, 0, 0.5); /* An inset shadow for a pressed effect */
-    transform: translateY(2px); /* Moves the button down to simulate a press */
-  }
+  padding: 10px 30px;
+  background-color: #795649; /* A dark wood-like brown */
+  color: #f4e5c3; /* A parchment-like off-white */
+  border: 2px solid #c0a080; /* A lighter brown border */
+  /*font-family: 'Goudy Bookletter 1911', serif;  A font with an old-style feel */
+  font-size: 18px;
+  text-shadow: 1px 1px 0px #a67c52; /* Gives a bit of depth to the text */
+  box-shadow: 2px 2px 0px #a67c52; /* Simulates an inset look */
+  border-radius: 4px; /* Slightly rounded corners */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.medieval-button:hover {
+  background-color: #8a6e2f; /* A lighter, worn wood color for hover */
+  box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.3); /* A more pronounced shadow for hover */
+}
+
+.medieval-button:active {
+  box-shadow: inset 1px 1px 2px 0px rgba(0, 0, 0, 0.5); /* An inset shadow for a pressed effect */
+  transform: translateY(2px); /* Moves the button down to simulate a press */
+}
+
+.number-input-wrapper {
+  position: relative;
+  width: 60px;
+  /* height: 40px; */
+  /* margin-bottom: 5px; */
+}
+
+.spinner-buttons {
+  position: absolute;
+  top: 0;
+  right: -20px; /* μπορείς να το προσαρμόσεις για να μπει λίγο πιο μέσα */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.spinner-buttons button {
+  border: none;
+  background: transparent;
+  font-size: 1em;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  color: inherit;
+}
+
+.spinner-buttons button.up {
+  width: 20px;
+  height: 20px;
+  background: url('/static/images/svg/move-up.svg') no-repeat center;
+  background-size: contain;
+}
+
+.spinner-buttons button.down {
+  width: 20px;
+  height: 20px;
+  background: url('/static/images/svg/move-down.svg') no-repeat center;
+  background-size: contain;
+}
+
+.level-spinner-buttons{
+  top: 46%;
+  right: -35px;
+}

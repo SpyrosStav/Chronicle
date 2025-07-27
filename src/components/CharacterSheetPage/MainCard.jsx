@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { useAbiltyScoreModifier,useModifier,useProficiencyModifier, usePassiveModifier } from '../../hooks/useModifier';
 import { AbilityScoreSection, SkillSection } from './StatSection';
+import { incrementValue, decrementValue} from '../../utils/inputHandler.js';
 
 function MainCard({char, onStatChange, isEditing}){
     
@@ -51,7 +52,12 @@ function MainCard({char, onStatChange, isEditing}){
     const passivePerceptionModifier = usePassiveModifier(perceptionModifier);
     const passiveInsightModifier = usePassiveModifier(insightModifier);
 
-    
+    // REFS
+    const inputRefAC = useRef(null);
+    const inputRefSpeed = useRef(null);
+    const inputRefMHP = useRef(null);
+    const inputRefCHP = useRef(null);
+    const inputRefTHP = useRef(null);
 
     function handleSkillChange(skillName, checked) {
         onStatChange('skills', {
@@ -66,19 +72,19 @@ function MainCard({char, onStatChange, isEditing}){
         <div className="leftAttributesCard">
 
             <div className="profAttributes">
-                <div className="profBlock bg-light">
+                <div className="profBlock backgroundCard">
                     <div className="circle"> {proficiencyModifier > 0 ? (`+${proficiencyModifier}`) : proficiencyModifier}</div>
                     <div className="prof-label">PROFICIENCY</div>
                 </div>
-                <div className="profBlock bg-light">
+                <div className="profBlock backgroundCard">
                     <div className="prof-label"> <div>PASSIVE</div><div>PERCEPTION</div> </div>
                     <div className="circle">{passivePerceptionModifier}</div>
                 </div>
-                <div className="profBlock bg-light">
+                <div className="profBlock backgroundCard">
                     <div className="circle">2</div>
                     <div className="prof-label">INSPIRATION</div>
                 </div>
-                <div className="profBlock bg-light">
+                <div className="profBlock backgroundCard">
                     <div className="prof-label"> <div>PASSIVE</div><div>INSIGHT</div> </div>
                     <div className="circle">{passiveInsightModifier}</div>
                 </div>
@@ -114,8 +120,6 @@ function MainCard({char, onStatChange, isEditing}){
                         skillModifier = {acrobaticsModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                         <SkillSection name = 'Sleight of Hand' skillName = 'Sleight_of_Hand' skillProficiency = {char.skills.Sleight_of_Hand} 
                         skillModifier = {sleightOfHandModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Acrobatics' skillName = 'Acrobatics' skillProficiency = {char.skills.Acrobatics} 
-                        skillModifier = {acrobaticsModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                         <SkillSection name = 'Stealth' skillName = 'Stealth' skillProficiency = {char.skills.Stealth} 
                         skillModifier = {stealthModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                     </div>
@@ -197,97 +201,130 @@ function MainCard({char, onStatChange, isEditing}){
         {/*Middle Card (HP, Weapons, Class Specifics)*/}
         <div className="middleAttributesCard">
 
-            <div className="combatStats">
+            <div className="combatStats backgroundCard mb-3">
                 {/* AC, INITIATIVE, SPEED */}
-                <div className="row mb-4 firstRow">
+                <div className="row mb-4 acInitiativeSpeedRow">
                     <div className="col-4">
-                        <div className="p-3 border bg-light shield">
+                        <div className="p-2 shield lightBackground">
                             <div className="shield-label">AC</div>
                             {isEditing ? (
-                                <input
-                                    type="number"
-                                    className="shield-value bg-light"
-                                    style={{border:'none'}}
-                                    value={char.ac}
-                                    onChange={(e) => onStatChange('ac', parseInt(e.target.value))}
-                                />
+                                <div className='number-input-wrapper mb-0'>
+                                    <input
+                                        type="number" ref={inputRefAC}
+                                        id='custom-number' className="shield-value"
+                                        min={0}
+                                        style={{border:"none"}} value={char.ac}
+                                        onChange={(e) => onStatChange('ac', parseInt(e.target.value))}
+                                    />
+                                    <div className="spinner-buttons">
+                                        <button className='up' onClick={() => {incrementValue('ac',inputRefAC,onStatChange)}}></button>
+                                        <button className='down' onClick={() => {decrementValue('ac',inputRefAC,onStatChange)}}></button>
+                                    </div>
+                                </div>
                                 ) : (
                                 <div className="shield-value">{char.ac}</div>
                             )}
                         </div>
                     </div>
                     <div className="col-4">
-                        <div className="p-3 border bg-light initiative">
+                        <div className="p-2 initiative lightBackground">
                             <div className="initiative-label">Initiative</div>
                             <div className="initiative-value">+{dexterityModifier}</div>
                         </div>
                     </div>
                     <div className="col-4">
-                        <div className="p-3 border bg-light speed">
-                            <div className="initiative-label">Speed</div>
+                        <div className="p-2 speed lightBackground">
+                            <div className="speed-label">Speed</div>
                             {isEditing ? (
-                                <input
-                                    type="number"
-                                    className="initiative-value bg-light"
-                                    style={{border:'none'}}
-                                    value={char.speed}
-                                    onChange={(e) => onStatChange('speed', parseInt(e.target.value))}
-                                />
+                                <div className='number-input-wrapper mb-0'>
+                                    <input
+                                        type="number" ref={inputRefAC}
+                                        id='custom-number' className="speed-value"
+                                        min={0}
+                                        style={{border:"none"}} value={char.speed}
+                                        onChange={(e) => onStatChange('speed', parseInt(e.target.value))}
+                                    />
+                                    <div className="spinner-buttons">
+                                        <button className='up' onClick={() => {incrementValue('speed',inputRefSpeed,onStatChange)}}></button>
+                                        <button className='down' onClick={() => {decrementValue('speed',inputRefSpeed,onStatChange)}}></button>
+                                    </div>
+                                </div>
                                 ) : (
-                                <div className="initiative-value">{char.speed}ft</div>
+                                <div className="speed-value">{char.speed}ft</div>
                             )}
                         </div>
                     </div>
                 </div>
 
                 {/* HP CARD */}
-                <div className="row mb-4 secondRow">
-                    <div className="col-8">
+                <div className="row mb-4 hpRow">
+                    <div className="col-4">
                         {/* MAX HP */}
-                        <div className="p-3 border bg-light HPCard divshadow">
-                            {isEditing ? (
-                                <input
-                                    type="number"
-                                    className="maxHP bg-light"
-                                    style={{border:'none'}}
-                                    value={char.max_hp}
-                                    onChange={(e) => onStatChange('max_hp', parseInt(e.target.value))}
-                                />
-                                ) : (
-                                <div className="maxHP bg-light">{char.max_hp}</div>
-                            )}
-                            <div className="bg-light maxHP-label">Hit Point Maximum</div>
-
-                            {/* CURRENT HP */}
-                            <div className="currentHPSection">
-                                <div className="currentHP-label">Current Hit Points</div>
+                        <div className="p-2  HPCard lightBackground">
+                            <div className='maxHPSection'>
+                                <div className="maxHP-label text-center">Maximum HP</div>
                                 {isEditing ? (
+                                    <div className='number-input-wrapper mb-0'>
+                                        <input
+                                            type="number" ref={inputRefMHP}
+                                            id='custom-number' className="maxHP"
+                                            min={0}
+                                            style={{border:"none", width: "60px"}} value={char.max_hp}
+                                            onChange={(e) => onStatChange('max_hp', parseInt(e.target.value))}
+                                        />
+                                        <div className="spinner-buttons">
+                                            <button className='up' onClick={() => {incrementValue('max_hp',inputRefMHP,onStatChange)}}></button>
+                                            <button className='down' onClick={() => {decrementValue('max_hp',inputRefMHP,onStatChange)}}></button>
+                                        </div>
+                                    </div>
+                                    ) : (
+                                    <div className="maxHP ">{char.max_hp}</div>
+                                )}
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div className='col-4'>
+                        {/* CURRENT HP */}
+                        <div className="currentHPSection lightBackground">
+                            <div className="currentHP-label text-center">Current HP</div>
+                            {isEditing ? (
+                                <div className='number-input-wrapper mb-0'>
                                     <input
-                                        type="number"
-                                        className="currentHP bg-light"
-                                        style={{border:'none'}}
-                                        value={char.c_hp}
+                                        type="number" ref={inputRefCHP}
+                                        id='custom-number' className="currentHP"
+                                        min={0} max={char.max_hp}
+                                        style={{border:'none'}} value={char.c_hp}
                                         onChange={(e) => onStatChange('c_hp', parseInt(e.target.value))}
                                     />
-                                ) : (
-                                <div className="currentHP">{char.c_hp}</div>
-                            )}
-                            </div>
+                                    <div className="spinner-buttons">
+                                        <button className='up' onClick={() => {incrementValue('c_hp',inputRefCHP,onStatChange)}}></button>
+                                        <button className='down' onClick={() => {decrementValue('c_hp',inputRefCHP,onStatChange)}}></button>
+                                    </div>
+                                </div>
+                            ) : (
+                            <div className="currentHP">{char.c_hp}</div>
+                        )}
                         </div>
                     </div>
 
                     {/* TEMPORARY HP */}
                     <div className="col-4">
-                        <div className="p-3 pt-0 border bg-light tempHPSection divshadow">
-                            <div className="tempHP-label">Temporary <br></br> Hit Points</div>
+                        <div className="p-2 tempHPSection lightBackground">
+                            <div className="tempHP-label">Temporary HP</div>
                             {isEditing ? (
+                                <div className='number-input-wrapper mb-0'>
                                     <input
-                                        type="number"
-                                        className="tempHP bg-light"
-                                        style={{border:'none', width:"80px"}}
-                                        value={char.temp_hp}
+                                        type="number" ref={inputRefTHP}
+                                        id='custom-number' className="tempHP"
+                                        style={{border:'none', width:"100%"}} value={char.temp_hp}
                                         onChange={(e) => onStatChange('temp_hp', parseInt(e.target.value))}
                                     />
+                                    <div className="spinner-buttons">
+                                        <button className='up' onClick={() => {incrementValue('temp_hp',inputRefTHP,onStatChange)}}></button>
+                                        <button className='down' onClick={() => {decrementValue('temp_hp',inputRefTHP,onStatChange)}}></button>
+                                    </div>
+                                </div>
                                 ) : (
                                 <div className="tempHP">{char.temp_hp}</div>
                             )}
@@ -297,23 +334,36 @@ function MainCard({char, onStatChange, isEditing}){
                 </div>
 
                 {/* HIT DIE, DEATH SAVES */}
-                <div className="row mb-4 thirdRow">
+                <div className="row mb-4 hitDiceDSRow">
                     <div className="col-6">
-                        <div className="p-3 border bg-light divshadow hitdie">F
-
+                            <div className='hitDice-label'>Hit Dice</div>
+                        <div className="p-2 hitDice lightBackground">
+                            {/* <hr style={{borderColor:"black", margin:"0", height:"1px", width:"50%", position:"relative", left:"25%"}}/> */}
+                            <div className='hitDiceContainer'>
+                                <div className=''>
+                                    <span>Used</span>
+                                    <div>{char.hit_die}</div>
+                                </div>
+                                <div className=''>
+                                    <span>Total</span>
+                                    <div>{char.level}</div>
+                                </div>
+                            </div>
+                            {/* <div className='circle'>HD</div> */}
                         </div>
                     </div>
                     <div className="col-6">
-                        <div className="p-3 border bg-light divshadow deathsaves">G
-
+                            <div className='deathSaves-label'>Death Saves</div>
+                        <div className="p-2 deathSaves lightBackground">
+                            <div className='deathSavesContainer'>Death Saves Container</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* WEAPONS */}
-            <div className="weaponsCard bg-light divshadow">
-                <h4>WEAPONS</h4>
+            <div className="weaponsCard backgroundCard ">
+                <div className='weapons-label'>WEAPONS</div>
 
                 <p>Name</p><p>Atk Bonus</p><p>Damage</p><p>Type</p>
 
