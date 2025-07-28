@@ -3,20 +3,12 @@
 {% block title %}Apothikes & Molintiria{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/indexPage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index/indexPage.css') }}">
 {% endblock %}
 
 {% block content %}
 
-<div class="title">
-    <h1>Welcome to the D&D App! {{test}}</h1>
-</div>
-
-<div id="characters">
-    {% for character in characters %}
-    <p>{{character.id}}: {{character.name}}</p><br>
-    {% endfor %}
-</div>
+<div class="title"></div>
 
 {% endblock %}
 

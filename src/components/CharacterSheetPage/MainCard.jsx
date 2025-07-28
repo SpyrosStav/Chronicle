@@ -1,10 +1,10 @@
 import React, {useState, useRef} from 'react';
 import { useAbiltyScoreModifier,useModifier,useProficiencyModifier, usePassiveModifier } from '../../hooks/useModifier';
-import { AbilityScoreSection, SkillSection } from './StatSection';
+import { AbilityScoreBlock, SkillBlock } from './AbiltyScoreBlock.jsx';
 import { incrementValue, decrementValue} from '../../utils/inputHandler.js';
 
 function MainCard({char, onStatChange, isEditing}){
-    
+
     // PROFICIENCY MODIFIER
     const proficiencyModifier = useProficiencyModifier(char.level);
 
@@ -69,23 +69,23 @@ function MainCard({char, onStatChange, isEditing}){
     return(
     <div className="attributesCard">
         {/* -- LEFT CARD --> PROFICIENCIES, ABILITY SCORES -- */}
-        <div className="leftAttributesCard">
+        <div className="attribute-group-left">
 
-            <div className="profAttributes">
-                <div className="profBlock backgroundCard">
+            <div className="profficiencyAttributes">
+                <div className="profficiencyBlock backgroundCard">
                     <div className="circle"> {proficiencyModifier > 0 ? (`+${proficiencyModifier}`) : proficiencyModifier}</div>
-                    <div className="prof-label">PROFICIENCY</div>
+                    <div className="profficiency-label">PROFICIENCY</div>
                 </div>
-                <div className="profBlock backgroundCard">
-                    <div className="prof-label"> <div>PASSIVE</div><div>PERCEPTION</div> </div>
+                <div className="profficiencyBlock backgroundCard">
+                    <div className="profficiency-label"> <div>PASSIVE</div><div>PERCEPTION</div> </div>
                     <div className="circle">{passivePerceptionModifier}</div>
                 </div>
-                <div className="profBlock backgroundCard">
+                <div className="profficiencyBlock backgroundCard">
                     <div className="circle">2</div>
-                    <div className="prof-label">INSPIRATION</div>
+                    <div className="profficiency-label">INSPIRATION</div>
                 </div>
-                <div className="profBlock backgroundCard">
-                    <div className="prof-label"> <div>PASSIVE</div><div>INSIGHT</div> </div>
+                <div className="profficiencyBlock backgroundCard">
+                    <div className="profficiency-label"> <div>PASSIVE</div><div>INSIGHT</div> </div>
                     <div className="circle">{passiveInsightModifier}</div>
                 </div>
             </div>
@@ -96,13 +96,13 @@ function MainCard({char, onStatChange, isEditing}){
                 {/* -- STRENGTH -- */}
                 <div className="stat">
                     {/* Ability Score  */}
-                    <AbilityScoreSection abilityScoreName = 'strength' abilityScoreModifier = {strengthModifier} 
+                    <AbilityScoreBlock abilityScoreName = 'strength' abilityScoreModifier = {strengthModifier} 
                     abilityScoreValue = {char.strength} isEditing = {isEditing} onStatChange = {onStatChange}/>
                     {/* Skills and ST */}
                     <div className="skillChecks">
-                        <SkillSection name = 'Saving Throws' skillName = 'Strength_ST' skillProficiency = {char.skills.Strength_ST} 
+                        <SkillBlock name = 'Saving Throws' skillName = 'Strength_ST' skillProficiency = {char.skills.Strength_ST} 
                         skillModifier = {strengthSTModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Athletics' skillName = 'Athletics' skillProficiency = {char.skills.Athletics} 
+                        <SkillBlock name = 'Athletics' skillName = 'Athletics' skillProficiency = {char.skills.Athletics} 
                         skillModifier = {athleticsModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                     </div>
                 </div>
@@ -110,85 +110,85 @@ function MainCard({char, onStatChange, isEditing}){
                 {/* -- DEXTERITY -- */}
                 <div className="stat">
                     {/* Ability Score  */}
-                    <AbilityScoreSection abilityScoreName = 'dexterity' abilityScoreModifier = {dexterityModifier} 
+                    <AbilityScoreBlock abilityScoreName = 'dexterity' abilityScoreModifier = {dexterityModifier} 
                     abilityScoreValue = {char.dexterity} isEditing = {isEditing} onStatChange = {onStatChange}/>
                     {/* Skills and ST */}
                     <div className="skillChecks">
-                        <SkillSection name = 'Saving Throws' skillName = 'Dexterity_ST' skillProficiency = {char.skills.Dexterity_ST} 
+                        <SkillBlock name = 'Saving Throws' skillName = 'Dexterity_ST' skillProficiency = {char.skills.Dexterity_ST} 
                         skillModifier = {dexteritySTModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Acrobatics' skillName = 'Acrobatics' skillProficiency = {char.skills.Acrobatics} 
+                        <SkillBlock name = 'Acrobatics' skillName = 'Acrobatics' skillProficiency = {char.skills.Acrobatics} 
                         skillModifier = {acrobaticsModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Sleight of Hand' skillName = 'Sleight_of_Hand' skillProficiency = {char.skills.Sleight_of_Hand} 
+                        <SkillBlock name = 'Sleight of Hand' skillName = 'Sleight_of_Hand' skillProficiency = {char.skills.Sleight_of_Hand} 
                         skillModifier = {sleightOfHandModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Stealth' skillName = 'Stealth' skillProficiency = {char.skills.Stealth} 
+                        <SkillBlock name = 'Stealth' skillName = 'Stealth' skillProficiency = {char.skills.Stealth} 
                         skillModifier = {stealthModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                     </div>
                 </div>
 
                 {/* -- CONSTITUTION -- */}
                 <div className="stat">
-                    <AbilityScoreSection abilityScoreName = 'constitution' abilityScoreModifier = {constitutionModifier} 
+                    <AbilityScoreBlock abilityScoreName = 'constitution' abilityScoreModifier = {constitutionModifier} 
                     abilityScoreValue = {char.constitution} isEditing = {isEditing} onStatChange = {onStatChange}/>
                     <div className="skillChecks">
-                        <SkillSection name = 'Saving Throws' skillName = 'Constitution_ST' skillProficiency = {char.skills.Constitution_ST} 
+                        <SkillBlock name = 'Saving Throws' skillName = 'Constitution_ST' skillProficiency = {char.skills.Constitution_ST} 
                         skillModifier = {constitutionSTModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                     </div>
                 </div>
 
                 {/* <!-- INTELLIGENCE --> */}
                 <div className="stat">
-                    <AbilityScoreSection abilityScoreName = 'intelligence' abilityScoreModifier = {intelligenceModifier} 
+                    <AbilityScoreBlock abilityScoreName = 'intelligence' abilityScoreModifier = {intelligenceModifier} 
                     abilityScoreValue = {char.intelligence} isEditing = {isEditing} onStatChange = {onStatChange}/>
                     <div className="skillChecks">
-                        <SkillSection name = 'Saving Throws' skillName = 'Intelligence_ST' skillProficiency = {char.skills.Intelligence_ST} 
+                        <SkillBlock name = 'Saving Throws' skillName = 'Intelligence_ST' skillProficiency = {char.skills.Intelligence_ST} 
                         skillModifier = {intelligenceSTModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Arcana' skillName = 'Arcana' skillProficiency = {char.skills.Arcana} 
+                        <SkillBlock name = 'Arcana' skillName = 'Arcana' skillProficiency = {char.skills.Arcana} 
                         skillModifier = {arcanaModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'History' skillName = 'History' skillProficiency = {char.skills.History} 
+                        <SkillBlock name = 'History' skillName = 'History' skillProficiency = {char.skills.History} 
                         skillModifier = {historyModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Investigation' skillName = 'Investigation' skillProficiency = {char.skills.Investigation} 
+                        <SkillBlock name = 'Investigation' skillName = 'Investigation' skillProficiency = {char.skills.Investigation} 
                         skillModifier = {investigationModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Nature' skillName = 'Nature' skillProficiency = {char.skills.Nature} 
+                        <SkillBlock name = 'Nature' skillName = 'Nature' skillProficiency = {char.skills.Nature} 
                         skillModifier = {natureModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Religion' skillName = 'Religion' skillProficiency = {char.skills.Religion} 
+                        <SkillBlock name = 'Religion' skillName = 'Religion' skillProficiency = {char.skills.Religion} 
                         skillModifier = {religionModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                     </div>
                 </div>
 
                 {/* <!-- WISDOM --> */}
                 <div className="stat">
-                    <AbilityScoreSection abilityScoreName = 'wisdom' abilityScoreModifier = {wisdomModifier} 
+                    <AbilityScoreBlock abilityScoreName = 'wisdom' abilityScoreModifier = {wisdomModifier} 
                     abilityScoreValue = {char.wisdom} isEditing = {isEditing} onStatChange = {onStatChange}/>
                     <div className="skillChecks">
-                        <SkillSection name = 'Saving Throws' skillName = 'Wisdom_ST' skillProficiency = {char.skills.Wisdom_ST} 
+                        <SkillBlock name = 'Saving Throws' skillName = 'Wisdom_ST' skillProficiency = {char.skills.Wisdom_ST} 
                         skillModifier = {wisdomSTModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Animal Handling' skillName = 'Animal_Handling' skillProficiency = {char.skills.Animal_Handling} 
+                        <SkillBlock name = 'Animal Handling' skillName = 'Animal_Handling' skillProficiency = {char.skills.Animal_Handling} 
                         skillModifier = {animalHandlingModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Insight' skillName = 'Insight' skillProficiency = {char.skills.Insight} 
+                        <SkillBlock name = 'Insight' skillName = 'Insight' skillProficiency = {char.skills.Insight} 
                         skillModifier = {insightModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Medicine' skillName = 'Medicine' skillProficiency = {char.skills.Medicine} 
+                        <SkillBlock name = 'Medicine' skillName = 'Medicine' skillProficiency = {char.skills.Medicine} 
                         skillModifier = {medicineModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Perception' skillName = 'Perception' skillProficiency = {char.skills.Perception} 
+                        <SkillBlock name = 'Perception' skillName = 'Perception' skillProficiency = {char.skills.Perception} 
                         skillModifier = {perceptionModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Survival' skillName = 'Survival' skillProficiency = {char.skills.Survival} 
+                        <SkillBlock name = 'Survival' skillName = 'Survival' skillProficiency = {char.skills.Survival} 
                         skillModifier = {survivalModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                     </div>
                 </div>
 
                 {/* <!-- CHARISMA --> */}
                 <div className="stat">
-                    <AbilityScoreSection abilityScoreName = 'charisma' abilityScoreModifier = {charismaModifier} 
+                    <AbilityScoreBlock abilityScoreName = 'charisma' abilityScoreModifier = {charismaModifier} 
                     abilityScoreValue = {char.charisma} isEditing = {isEditing} onStatChange = {onStatChange}/>
                     <div className="skillChecks">
-                        <SkillSection name = 'Saving Throws' skillName = 'Charisma_ST' skillProficiency = {char.skills.Charisma_ST} 
+                        <SkillBlock name = 'Saving Throws' skillName = 'Charisma_ST' skillProficiency = {char.skills.Charisma_ST} 
                         skillModifier = {charismaSTModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Deception' skillName = 'Deception' skillProficiency = {char.skills.Deception} 
+                        <SkillBlock name = 'Deception' skillName = 'Deception' skillProficiency = {char.skills.Deception} 
                         skillModifier = {deceptionModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Intimidation' skillName = 'Intimidation' skillProficiency = {char.skills.Intimidation} 
+                        <SkillBlock name = 'Intimidation' skillName = 'Intimidation' skillProficiency = {char.skills.Intimidation} 
                         skillModifier = {intimidationModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Performance' skillName = 'Performance' skillProficiency = {char.skills.Performance} 
+                        <SkillBlock name = 'Performance' skillName = 'Performance' skillProficiency = {char.skills.Performance} 
                         skillModifier = {performanceModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
-                        <SkillSection name = 'Persuation' skillName = 'Persuation' skillProficiency = {char.skills.Persuation} 
+                        <SkillBlock name = 'Persuation' skillName = 'Persuation' skillProficiency = {char.skills.Persuation} 
                         skillModifier = {persuationModifier} isEditing = {isEditing} onSkillChange = {handleSkillChange}/>
                     </div>
                 </div>     
@@ -199,9 +199,10 @@ function MainCard({char, onStatChange, isEditing}){
         </div>
 
         {/*Middle Card (HP, Weapons, Class Specifics)*/}
-        <div className="middleAttributesCard">
+        <div className="attribute-group-middle">
 
             <div className="combatStats backgroundCard mb-3">
+                <div className='text-center' style={{marginBottom:"5px", fontSize:"1.2rem", fontWeight:"600"}}>COMBAT STATS</div>
                 {/* AC, INITIATIVE, SPEED */}
                 <div className="row mb-4 acInitiativeSpeedRow">
                     <div className="col-4">
@@ -355,7 +356,35 @@ function MainCard({char, onStatChange, isEditing}){
                     <div className="col-6">
                             <div className='deathSaves-label'>Death Saves</div>
                         <div className="p-2 deathSaves lightBackground">
-                            <div className='deathSavesContainer'>Death Saves Container</div>
+                            <div className='deathSavesContainer'>
+                                <div className="dsSuccess">
+                                    <div style={{display:'inline-block'}}>Successes</div>
+                                    <div className="death-saves-successes-checkbox" style={{display:'inline-block'}}>
+                                        {[0, 1, 2].map((i) => (
+                                            <input
+                                            key={i}
+                                            type="checkbox"
+                                            checked={char.death_saves_success > i}
+                                            readOnly
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="dsFail">
+                                    <div style={{display:'inline-block'}}>Failures</div>
+                                    <div className="death-saves-failures-checkbox" style={{display:'inline-block'}}>
+                                        {[0, 1, 2].map((i) => (
+                                            <input
+                                            key={i}
+                                            type="checkbox"
+                                            checked={char.death_saves_fail > i}
+                                            readOnly
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -367,21 +396,28 @@ function MainCard({char, onStatChange, isEditing}){
 
                 <p>Name</p><p>Atk Bonus</p><p>Damage</p><p>Type</p>
 
-                <div>Crossbow</div><div>+3</div><div>1d6 +5</div><div>Piercing</div>
-
-                <div>Rapier</div><div>+9</div><div>1d8 +7</div><div>Piercing</div>
-
-                <div>Dagger</div><div>+3</div><div>1d4 +4</div><div>Piercing</div>
+                {char.weapons.map((weapon) => (
+                    <React.Fragment key={weapon.weapon_id}>
+                        <div>{weapon.name}</div>
+                        <div>{weapon.atk_bonus > 0 ? (`+${weapon.atk_bonus}`) : weapon.atk_bonus}</div>
+                        <div>{weapon.num_of_die}d{weapon.damage_die} {weapon.extra_damage > 0 ? (`+${weapon.extra_damage}`) : weapon.extra_damage}</div>
+                        <div>{weapon.damage_type}</div>
+                    </React.Fragment>
+                ))}
             </div>
 
             {/* SPECIFIC CLASS CARD (E.G. SPELLCASTING) */}
-            <div className="charclassAbilities"></div>
+            <div className="charclassAbilities">
+
+            </div>
 
         </div>
 
         {/* FREE TEXT CARD FOR CLASS SKILLS */}
-        <div className="rightAttributesCard" >
-            <div className="charclassFeatures"></div>
+        <div className="attribute-group-right" >
+            <div className="charclassFeatures">
+                
+            </div>
         </div>
     </div>
     )

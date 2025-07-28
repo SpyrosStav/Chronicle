@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import useCharacterData from '../hooks/useCharacterData';
-import BasicInfoCard   from '../components/CharacterSheetPage/BasicInfoCard';
+import NameCard   from '../components/CharacterSheetPage/NameCard';
 import MainCard from '../components/CharacterSheetPage/MainCard';
 
 
-export default function CharacterSheetPage({charId}) {
+export default function CharacterSheetPage({charId, userId}) {
   //Character Fetch from Backend
   const {char, loading, error} = useCharacterData(charId);
 
@@ -14,6 +14,8 @@ export default function CharacterSheetPage({charId}) {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+
+  
 
   useEffect(() => {
     if (char) {
@@ -105,22 +107,27 @@ export default function CharacterSheetPage({charId}) {
     setImagePreviewUrl(null);
   }
 
+  const canEdit = Number(userId) === Number(char.player_id);
+  
   return (
     <>
-      <div className='editBtnsDiv'>
-        {isEditing ?
-          (<>
-              <button className=' divshadow medieval-button' onClick={() => {
-                handleSave();
-                setIsEditing(!isEditing);
-              }}> Save </button>
-              <button className=' divshadow medieval-button' onClick={handleCancel}> Cancel </button>
-            </>) : 
-          (<button className=' divshadow medieval-button' onClick={() => setIsEditing(!isEditing)}> Edit </button>)
-          }
-      </div>
+     { canEdit ? 
+        (<div className='editBtnsDiv'>{canEdit}
+          {isEditing ?
+            (<>
+                <button className=' divshadow medieval-button' onClick={() => {
+                  handleSave();
+                  setIsEditing(!isEditing);
+                }}> Save </button>
+                <button className=' divshadow medieval-button' onClick={handleCancel}> Cancel </button>
+              </>) : 
+            (<button className=' divshadow medieval-button' onClick={() => setIsEditing(!isEditing)}> Edit </button>)
+            }
+        </div>)
+        : (null)
+      }
 
-      <BasicInfoCard char={editableStats} onStatChange={handleStatChange} isEditing={isEditing} imagePreviewUrl = {imagePreviewUrl} onImageChange={handleImageChange}/>
+      <NameCard char={editableStats} onStatChange={handleStatChange} isEditing={isEditing} imagePreviewUrl = {imagePreviewUrl} onImageChange={handleImageChange}/>
       <MainCard char={editableStats} onStatChange={handleStatChange} isEditing={isEditing}/>
     </>
   );

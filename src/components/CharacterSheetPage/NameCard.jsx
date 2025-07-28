@@ -2,12 +2,12 @@ import React, {useState, useRef} from 'react';
 import { incrementValue, decrementValue} from '../../utils/inputHandler.js';
 
 // -- BASIC INFO CARD (Name, Race, Class etc) --
-function BasicInfoCard ({char, onStatChange, isEditing, imagePreviewUrl, onImageChange}) {
+function NameCard ({char, onStatChange, isEditing, imagePreviewUrl, onImageChange}) {
 
     const inputRefLevel = useRef(null);
 
     return(
-        <div className="basicInfoCard">
+        <div className="nameCard">
             <div className="charImageWrapper">
                 <div className="charImage">
                     <img src={isEditing && imagePreviewUrl ? imagePreviewUrl : char.profile_image_path} alt="character-image"/>
@@ -50,4 +50,4 @@ function BasicInfoCard ({char, onStatChange, isEditing, imagePreviewUrl, onImage
     )  
 }
 
-export default BasicInfoCard;
+export default NameCard;

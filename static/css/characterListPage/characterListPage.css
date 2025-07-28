@@ -19,7 +19,6 @@
     margin: 20px auto;
     font-size: 1.5em;
     transition: transform 0.5s ease, box-shadow 0.3s ease;;
-
 }
 
 .createCharBtn:hover {

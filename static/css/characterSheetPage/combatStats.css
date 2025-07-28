@@ -1,0 +1,170 @@
+/* --------------------------------------- AC - INITIATIVE - SPEED --------------------------------------- */
+.combatStats {
+    padding: 10px;
+}
+
+.shield,.initiative,.speed {
+    min-height: 120px;
+    text-align: center;
+    padding-top: 0;
+    position: relative;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+}
+
+.shield-value,.initiative-value, .speed-value,
+input.shield-value,input.speed-value {
+    width: 80px;
+    max-width: 100%;
+    text-align: center;
+    font-size: 3em;
+    font-weight: bold;
+    /* margin-bottom: 5px; */
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.shield-label,.initiative-label,.speed-label{
+    font-size: 1.2rem;
+}
+/* --------------------------------------- HP CARD --------------------------------------- */
+.HPCard {
+    position: relative;
+    height: 140px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.hpRow > div > div {
+    min-height: 140px;
+    position: relative;
+}
+
+.maxHP, .currentHP, .tempHP,
+input.maxHP, input.currentHP, input.tempHP {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    vertical-align: middle;
+    padding: 0;
+    margin: 0;
+    min-height: 50px;
+
+}
+
+.currentHPSection,.maxHPSection,.tempHPSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; 
+}
+
+.maxHP-label,.currentHP-label,.tempHP-label{
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.hitDie, .deathSaves,
+input.hitDie, input.deathSaves{
+    min-height: 70px;
+}
+
+.number-input-wrapper-hp {
+    position: relative; 
+    width: 60px;
+}
+
+/* --------------------------------------- HIT DICE - DEATH SAVES --------------------------------------- */
+.hitDice, .deathSaves {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.hitDice-label,.deathSaves-label{
+    width: 100%;
+    text-align: center;
+    font-size: 1.4rem;
+    max-height: fit-content;
+}
+
+.hitDiceContainer,.deathSavesContainer{
+    display: flex;
+    min-height: 80px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.hitDiceContainer > div {
+    width: 45%;
+    height: 100%;
+    text-align: center;
+}
+
+.hitDiceContainer span {
+    font-size: 1.2em;
+}
+
+.hitDiceContainer > div > div{
+    margin-top: auto;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.deathSavesContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.dsSuccess,.dsFail{
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+    justify-content:space-evenly;
+}
+
+/* --------------------------------------- WEAPONS CARD --------------------------------------- */
+.weaponsCard {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr;
+    padding: 5px;
+}
+
+.weaponsCard > p {
+    height: max-content;
+    padding-left: 5px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid black;
+}
+
+.weaponsCard > div {
+    margin: 0px 5px 10px 5px;
+    padding-left: 5px;
+    font-size: 1.4em;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.weapons-label{
+    grid-column: 1/-1;
+    margin: 0 0 8px 0;
+    text-align: center;
+    justify-self: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.weaponsCard > * { 
+    text-align: center;
+}

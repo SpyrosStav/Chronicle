@@ -28,7 +28,11 @@ def get_db_connection():
 # --------------------------------------------------- Decorators --------------------------------------------------- #
 @app.context_processor
 def inject_user():
-    return dict(username=session.get("username"))
+    return {
+        "username":session.get("username"),
+        "user_id":session.get("user_id"),
+        "email":session.get("email")
+    }
 
 # --------------------------------------------------- Login Handler --------------------------------------------------- #
 app.secret_key = os.getenv("SECRET_KEY")
@@ -57,6 +61,7 @@ def register():
     try:
         cursor.execute("""INSERT INTO Players (username,email,player_password)
                        VALUES (?,?,?)""", (username,email,hashed_password))
+        new_id = cursor.fetchone()[0]
         conn.commit()
 
     except pyodbc.IntegrityError as e:
@@ -69,6 +74,7 @@ def register():
     conn.close()
     session["username"] = username
     session["email"] = email
+    session["user_id"] = new_id
     session.permanent = True 
     return jsonify({'status' : 'success', 'message' : 'Register Successful!'})
 
@@ -81,13 +87,14 @@ def login():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("""SELECT player_password, email FROM Players where username = ?""", username)
+    cursor.execute("""SELECT player_password, email, player_id FROM Players where username = ?""", username)
     row = cursor.fetchone()
 
     if(row):
         if(verify_password(row[0], password)):
             session["username"] = username
             session["email"] = row[1]
+            session["user_id"] = row[2]
             session.permanent = True
             return jsonify({'status' : 'success', 'message' : 'Login Successful'})
         else:
@@ -102,6 +109,8 @@ def login():
 @app.route("/logout")
 def logout():
     session.pop("username", None)  # Remove user session
+    session.pop("email", None)  # Remove user session
+    session.pop("user_id", None)  # Remove user session
     return redirect(url_for("home"))  # Redirect to homepage
 
 # --------------------------------------------------- Template Rendering --------------------------------------------------- #
@@ -144,7 +153,10 @@ def get_list_of_characters():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute(""" SELECT a.* FROM CHARACTERS AS a JOIN Players as b ON a.player_id = b.player_id WHERE b.username = ? ORDER BY a.character_id ASC""", (session["username"],))
+    cursor.execute(""" SELECT a.* 
+                   FROM CHARACTERS AS a JOIN Players as b ON a.player_id = b.player_id 
+                   WHERE b.username = ? ORDER BY a.character_id ASC""", 
+                   (session["username"],)) 
     rows = cursor.fetchall()
 
     data = []
@@ -159,7 +171,6 @@ def get_list_of_characters():
 def create_character(player_id):
     return
 
-# Αλλαγη για να μπορει να δει τον χαρακτηρα αλλα οχι να μπορει να επεξεργαστει αν δεν ειναι δικος του
 # --------------- FETCH CHARACTER ---------------
 @app.route("/api/character/<int:char_id>", methods = ['GET'])
 def get_single_character(char_id):
@@ -172,32 +183,47 @@ def get_single_character(char_id):
 
     data = dict(zip([column[0] for column in cursor.description], row))
 
-    if 'username' not in session:
-        return jsonify({'status': 'failure', 'message': 'You must be logged in'}), 401
-    if data['username'] != session['username']:
-        return jsonify({'status': 'failure', 'message': 'Character Not Found'}), 403
-
     # Fetch Skill Proficiencies
     cursor.execute("""SELECT a.character_id, b.skill_name, a.isProficient 
-                        FROM Character_Skills as a
-                        JOIN Skills as b
+                        FROM Character_Skills as a JOIN Skills as b
                         ON a.skill_id = b.skill_id
                         WHERE character_id = ?""", (char_id,))
     rows = cursor.fetchall()
 
     data['skills'] = {row[1] : row[2] for row in rows}
 
+    # Fetch Weapons
+    cursor.execute("""SELECT * FROM Weapons WHERE character_id = ?""", (char_id,))
+    rows = cursor.fetchall()
+    data['weapons'] = [{"name" : row[2], "atk_bonus" : row[3],
+                        "num_of_die" : row[4], "damage_die" : row[5], 
+                        "extra_damage": row[6], "damage_type": row[7]} for row in rows]
+
     cursor.close()
     conn.close()
 
+    if 'username' not in session:
+        # return jsonify({'status': 'failure', 'message': 'You must be logged in'}), 401
+        return jsonify(data)
+    if data['username'] != session['username']:
+        return jsonify({'status': 'failure', 'message': 'Character Not Found'}), 403
+    
     return jsonify(data)
 
 # --------------- UPDATE CHARACTER ---------------
 @app.route('/api/update-character/<int:char_id>', methods=['POST'])
 def update_character(char_id):
+
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    
     character_data_raw = request.form.get('characterData')
     character_data = json.loads(character_data_raw)
     image_file = request.files.get('image')
+
+        
+    if character_data["player_id"] != session["user_id"]:
+        return jsonify({"error": "Forbidden"}), 403
 
     if image_file:
         # image_path = os.path.join('static/images/', image_file.filename)

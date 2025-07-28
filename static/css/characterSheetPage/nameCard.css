@@ -1,0 +1,77 @@
+/* --------------------------------------- NAME CARD --------------------------------------- */
+.nameCard {
+    display: flex;     
+    align-items: center;
+    gap: 10px; 
+    padding-bottom: 20px;
+}
+
+.charImageWrapper{ 
+    position: relative;
+    margin-left: 8%;
+    margin-top: 3%;
+    width: 20%; 
+    max-width: 200px;
+}
+
+.charImageWrapper img{ 
+    height: 200px; 
+    width: 200px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    aspect-ratio: 1 / 1; 
+    display: block; 
+}
+
+.levelBadge{
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    font-size: 2em;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+}
+
+.charName { 
+    padding: 0px 30px; 
+    box-sizing: border-box;
+    text-shadow: 3px 3px 5px #926019ff;
+    font-weight: 500;
+}
+
+.className {  
+    font-size: 25px; 
+}
+
+.charInfo > div {     
+    width: 50%;    
+    box-sizing: border-box;    
+    padding: 0px 30px;
+    font-size: 1.2em;
+}
+
+.label{
+    font-weight: bold;
+    color: #462c05;
+    margin-right: 4px;
+}
+
+.classInfo {     
+    padding: 0px 30px; 
+}
+
+.subclassInfo {    
+    display: flex;     
+    align-items: center;     
+    justify-content: center; 
+}
+
+.attributesCard {    
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+}

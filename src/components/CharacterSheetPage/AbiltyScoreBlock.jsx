@@ -1,6 +1,6 @@
 import React, {useState, useRef} from 'react';
 
-export function AbilityScoreSection({abilityScoreName,abilityScoreModifier,abilityScoreValue,isEditing, onStatChange}){
+export function AbilityScoreBlock({abilityScoreName,abilityScoreModifier,abilityScoreValue,isEditing, onStatChange}){
     const inputRef = useRef(null);
 
     const increment = () => {
@@ -49,7 +49,7 @@ export function AbilityScoreSection({abilityScoreName,abilityScoreModifier,abili
     )
 }
 
-export function SkillSection({name, skillName,skillProficiency,skillModifier,isEditing, onSkillChange}){
+export function SkillBlock({name, skillName,skillProficiency,skillModifier,isEditing, onSkillChange}){
     return (
         <div>
             <input type="checkbox" className='me-1' checked={skillProficiency || false}

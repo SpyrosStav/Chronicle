@@ -3,13 +3,16 @@
 {% block title %}A&M - Characters List{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/characterSheetPage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/characterSheetPage/characterSheetPage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/characterSheetPage/nameCard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/characterSheetPage/abilityScores.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/characterSheetPage/combatStats.css') }}">
 {% endblock %}
 
 
 <!------------------------------------- MAIN BODY ------------------------------------->
 {% block content %}
-<div id="char-sheet-root" data-charid="{{char_id}}"></div>
+<div id="char-sheet-root" data-charid="{{char_id}}" data-userid="{{user_id}}"></div>
  
     {#  Development (#dev) #}
     {% if config['ENV'] == 'development' %}

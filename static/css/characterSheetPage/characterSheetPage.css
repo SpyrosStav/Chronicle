@@ -1,0 +1,101 @@
+/* --------------------------------------- UTILITY CLASSES --------------------------------------- */
+div, input.maxHP {
+    border-radius: 15px;
+}
+
+input {
+    background: transparent;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-base {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
+.inline {   
+    display: inline-block; 
+    margin-right: 10px;
+}
+
+.backgroundCard {
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.45);
+    background: rgba(20, 20, 20, 0.20);
+    backdrop-filter: blur(2px);
+    border: 3px solid #4731106e;
+}
+
+.lightBackground{
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.45);
+    /* background: rgba(231, 214, 214, 0.3); */
+    /* backdrop-filter: blur(2px); */
+    /* border: 3px solid #4731106e; */
+}
+
+.bg-loaded {
+    background-image: url("/static/images/backgroundImages/characterSheetBackground.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    padding-top: 40px;
+}
+
+
+/* --------------------------------------- BUTTONS --------------------------------------- */
+.editBtnsDiv{
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-right: 20px;
+}
+.editBtnsDiv > .btn {
+    width: 75px;
+}
+
+/* --------------------------------------- MAIN COLUMNS --------------------------------------- */
+.attributesCard{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.attribute-group-left{
+    flex: 1;
+    margin: 10px;
+    margin-left: 40px;
+}
+
+.attribute-group-middle{
+    flex: 1.5;
+    margin: 10px;
+}
+
+.attribute-group-right{
+    flex: 2;
+    margin: 10px;
+    margin-right: 20px;
+}

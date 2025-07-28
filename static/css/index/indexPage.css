@@ -6,3 +6,12 @@
     background-attachment: relative;
     min-height: 100vh;
 }
+
+.title {
+    background-image: url("/static/images/backgroundImages/logo.png");
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: contain;
+    min-width: 60vw;
+    min-height: 20vh;
+}
