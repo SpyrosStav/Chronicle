@@ -55,7 +55,7 @@ input[type="number"]:hover {
 .spinner-buttons {
   position: absolute;
   top: 0;
-  right: -20px; /* μπορείς να το προσαρμόσεις για να μπει λίγο πιο μέσα */
+  right: -20px;
   display: flex;
   flex-direction: column;
   justify-content: center;

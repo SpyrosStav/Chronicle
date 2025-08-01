@@ -78,24 +78,28 @@ input {
 }
 
 /* --------------------------------------- MAIN COLUMNS --------------------------------------- */
-.attributesCard{
+.attributes{
     display: flex;
     flex-wrap: wrap;
-}
+} 
 
+/* LEFT */
 .attribute-group-left{
     flex: 1;
     margin: 10px;
     margin-left: 40px;
+    max-width: fit-content;
 }
 
+/* MIDDLE */
 .attribute-group-middle{
-    flex: 1.5;
+    flex: 1.7;
     margin: 10px;
 }
 
+/* RIGHT */
 .attribute-group-right{
-    flex: 2;
+    flex: 1.7 1 0;
     margin: 10px;
     margin-right: 20px;
 }

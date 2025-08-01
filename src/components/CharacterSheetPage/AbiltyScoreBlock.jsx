@@ -5,15 +5,15 @@ export function AbilityScoreBlock({abilityScoreName,abilityScoreModifier,ability
 
     const increment = () => {
         if (inputRef.current) {
-        inputRef.current.stepUp();
-        onStatChange(abilityScoreName, parseInt(inputRef.current.value));
+            inputRef.current.stepUp();
+            onStatChange(abilityScoreName, parseInt(inputRef.current.value));
         }
     };
 
     const decrement = () => {
         if (inputRef.current) {
-        inputRef.current.stepDown();
-        onStatChange(abilityScoreName, parseInt(inputRef.current.value));
+            inputRef.current.stepDown();
+            onStatChange(abilityScoreName, parseInt(inputRef.current.value));
         }
     };
 
@@ -21,35 +21,26 @@ export function AbilityScoreBlock({abilityScoreName,abilityScoreModifier,ability
         <div className="statValue backgroundCard">
             <div className="attributeName">{abilityScoreName.toUpperCase()}</div>
             <div className="modifier">
-                {abilityScoreModifier > 0 
-                ? (`+${abilityScoreModifier}`) 
-                : abilityScoreModifier}
+                {abilityScoreModifier > 0 ? (`+${abilityScoreModifier}`) : abilityScoreModifier}
             </div>
-            {isEditing ? (
-                <div className='number-input-wrapper'>
-                    <input
-                        ref={inputRef}
-                        type="number"
-                        min={1}
-                        max={20}
-                        className="abilityScore"
-                        id='custom-number'
+            {isEditing ? 
+                (<div className='number-input-wrapper'>
+                    <input type="number" ref={inputRef} min={1} max={20}
                         value={abilityScoreValue}
+                        id='custom-number' className="abilityScore"
                         onChange={(e) => onStatChange(abilityScoreName, parseInt(e.target.value))}
                     />
                     <div className="spinner-buttons">
                         <button className='up' onClick={() => {increment()}}></button>
                         <button className='down' onClick={() => {decrement()}}></button>
                     </div>
-                </div>
-                ) : (
-                <div className="abilityScore">{abilityScoreValue}</div>
-            )}
+                </div>) : (<div className="abilityScore">{abilityScoreValue}</div>)
+            }
         </div>
     )
 }
 
-export function SkillBlock({name, skillName,skillProficiency,skillModifier,isEditing, onSkillChange}){
+export function SkillBlock({name, skillName, skillProficiency, skillModifier, isEditing, onSkillChange}){
     return (
         <div>
             <input type="checkbox" className='me-1' checked={skillProficiency || false}
@@ -61,14 +52,4 @@ export function SkillBlock({name, skillName,skillProficiency,skillModifier,isEdi
             {name}: {skillModifier > 0 ? `+${skillModifier}` : skillModifier}
         </div>
     )
-}
-
-
-
-function increment() {
-    inputValue.stepUp();
-}
-
-function decrement() {
-    inputValue.stepDown();
 }

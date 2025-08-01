@@ -16,7 +16,6 @@ app.config['ENV'] = os.getenv('ENV', 'production')
 UPLOAD_FOLDER = 'static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
 # --------------------------------------------------- DB Connection --------------------------------------------------- #
 SERVER = os.getenv("SERVER")
 DATABASE = os.getenv("DATABASE")
@@ -181,13 +180,16 @@ def get_single_character(char_id):
     cursor.execute("""SELECT a.*, b.username FROM Characters AS a JOIN Players as b ON a.player_id = b.player_id WHERE a.character_id = ?""", (char_id,))
     row = cursor.fetchone()
 
+    if not row:
+        return jsonify({"error": "Character not found"}), 404
+
     data = dict(zip([column[0] for column in cursor.description], row))
 
     # Fetch Skill Proficiencies
     cursor.execute("""SELECT a.character_id, b.skill_name, a.isProficient 
-                        FROM Character_Skills as a JOIN Skills as b
-                        ON a.skill_id = b.skill_id
-                        WHERE character_id = ?""", (char_id,))
+                    FROM Character_Skills as a JOIN Skills as b
+                    ON a.skill_id = b.skill_id 
+                    WHERE character_id = ?""", (char_id,))
     rows = cursor.fetchall()
 
     data['skills'] = {row[1] : row[2] for row in rows}
@@ -195,18 +197,15 @@ def get_single_character(char_id):
     # Fetch Weapons
     cursor.execute("""SELECT * FROM Weapons WHERE character_id = ?""", (char_id,))
     rows = cursor.fetchall()
-    data['weapons'] = [{"name" : row[2], "atk_bonus" : row[3],
-                        "num_of_die" : row[4], "damage_die" : row[5], 
-                        "extra_damage": row[6], "damage_type": row[7]} for row in rows]
+    data['weapons'] = [{"weapon_id" : row[0], "name" : row[2], "atk_bonus" : row[3],
+                        "damage_die" : row[4], 
+                        "extra_damage": row[5], "damage_type": row[6]} for row in rows]
 
     cursor.close()
     conn.close()
 
     if 'username' not in session:
-        # return jsonify({'status': 'failure', 'message': 'You must be logged in'}), 401
         return jsonify(data)
-    if data['username'] != session['username']:
-        return jsonify({'status': 'failure', 'message': 'Character Not Found'}), 403
     
     return jsonify(data)
 
@@ -214,67 +213,124 @@ def get_single_character(char_id):
 @app.route('/api/update-character/<int:char_id>', methods=['POST'])
 def update_character(char_id):
 
+    # Check if logged in
     if "user_id" not in session:
         return jsonify({"error": "Unauthorized"}), 401
     
+    # Get Form Data
     character_data_raw = request.form.get('characterData')
     character_data = json.loads(character_data_raw)
     image_file = request.files.get('image')
 
-        
+    # Check if player is authorized   
     if character_data["player_id"] != session["user_id"]:
         return jsonify({"error": "Forbidden"}), 403
 
+    # Check if image has changed
     if image_file:
-        # image_path = os.path.join('static/images/', image_file.filename)
         ext = os.path.splitext(image_file.filename)[1]
         unique_filename = f"{uuid.uuid4().hex}{ext}"
-
         image_path = os.path.join('static/images/characterImages/',unique_filename)
-        print('trying to save to path: ', image_path)
         image_file.save(image_path)
         image_path_for_db = f"/static/images/characterImages/{unique_filename}"
     else:
         image_path_for_db = character_data.get("profile_image_path")
 
+    # Get connection
     conn = get_db_connection()
     cursor = conn.cursor()
-    try:
-        cursor.execute("""UPDATE dbo.Characters SET character_name = ?, level = ?, class = ?, subclass = ?, race = ?,
-                    background = ?, strength = ?, dexterity = ?, constitution = ?, intelligence = ?, wisdom = ?,
-                    charisma = ?, max_hp = ?, c_hp = ?, temp_hp = ?, ac = ?, speed = ?, inspiration = ?, 
-                    hit_die = ?, death_saves_success = ?, death_saves_fails = ?, profile_image_path = ?
-                    WHERE character_id = ?""", 
-                    (    character_data['character_name'], character_data['level'], character_data['class'], character_data['subclass'],
-                            character_data['race'], character_data['background'],
-                            character_data['strength'], character_data['dexterity'], character_data['constitution'],
-                            character_data['intelligence'], character_data['wisdom'], character_data['charisma'],
-                            character_data['max_hp'],character_data['c_hp'],character_data['temp_hp'],
-                            character_data['ac'],character_data['speed'],character_data['inspiration'],
-                            character_data['hit_die'],character_data['death_saves_success'],character_data['death_saves_fail'],
-                            image_path_for_db,
-                            char_id
-                        ))
 
-        for skill_name, is_proficient in character_data["skills"].items():
-            cursor.execute("""UPDATE cs 
-                            SET cs.isProficient = ?
-                            FROM Character_Skills as cs
-                            JOIN Skills as s ON cs.skill_id = s.skill_id
-                            WHERE character_id = ? and s.skill_name = ? """,(is_proficient,char_id,skill_name))
-            
+    try:
+        # Update Main Attributes
+        update_character_core(cursor, character_data, char_id, image_path_for_db)
+        # Update Skills
+        update_skills(cursor, character_data["skills"], char_id)
+        # Update Weapons
+        update_weapons(cursor, character_data["weapons"])
         conn.commit()
-        cursor.close()
-        conn.close()
         return jsonify({"message": "Character updated successfully",
                         "status": "success"}), 200
     except Exception as e:
-        print(e)
+        conn.rollback()
         return jsonify({"message": "Error updating character.",
                         "status": "danger"}), 404
+    finally:
+        cursor.close()
+        conn.close()
 
-# Get Profile Info
-@app.route("/api/profile", methods = ['GET'])
+# --------------- ADD WEAPON ---------------
+@app.route('/api/add-weapon/<int:char_id>', methods=['POST'])
+def add_weapon(char_id):
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    player_id = session["user_id"]
+    weapons = request.get_json()
+
+
+
+    values = []
+    for w in weapons:
+        values.append((char_id,            
+                       w.get("name", ""),
+                        w.get("atk_bonus", 0),
+                        w.get("damage_die", ""),
+                        w.get("extra_damage", 0),
+                        w.get("damage_type", "")
+                    ))
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT 1 FROM Characters WHERE character_id = ? AND player_id = ?", (char_id, player_id))
+    if not cursor.fetchone():
+        return jsonify({"error": "Not allowed"}), 403
+
+    query = """INSERT INTO Weapons (character_id,weapon_name,atk_bonus,damage_die,extra_damage,damage_type)
+        VALUES (?,?,?,?,?,?)"""
+
+    try:
+        # Insert all new weapons in one batch
+        cursor.executemany(query, values)
+        conn.commit()
+        return jsonify({"message": "Weapons inserted successfully"}), 200
+
+    except Exception as e:
+        print(e)
+        conn.rollback()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
+
+# --------------- DELETE WEAPON ---------------
+@app.route('/api/delete-weapon/', methods=['POST'])
+def delete_weapon():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    player_id = session["user_id"]
+    weapon_ids = request.get_json()
+    placeholders = ','.join('?' for _ in weapon_ids)
+
+    query = f"""DELETE FROM Weapons WHERE weapon_id IN ({placeholders}) 
+                   AND character_id IN (
+                   SELECT character_id FROM Characters Where player_id = ?)"""
+
+    params = weapon_ids + [player_id]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()   
+    cursor.execute(query, params)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({"message":"success"}),200
+
+
+# --------------- PROFILE INFO ---------------
+@app.route("/api/profile/", methods = ['GET'])
 def fetch_profile():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -292,6 +348,36 @@ def fetch_profile():
     conn.close()
 
     return jsonify(player_info), 200
+
+# --------------------------------------------------- HELPER FUNCTIONS ---------------------------------------------------
+def update_character_core(cursor, data, char_id, image_path_for_db):
+    cursor.execute("""UPDATE dbo.Characters SET character_name = ?, level = ?, class = ?, subclass = ?, race = ?,
+        background = ?, strength = ?, dexterity = ?, constitution = ?, intelligence = ?, wisdom = ?,
+        charisma = ?, max_hp = ?, c_hp = ?, temp_hp = ?, ac = ?, speed = ?, inspiration = ?, 
+        hit_die = ?, death_saves_success = ?, death_saves_fail = ?, profile_image_path = ?
+        WHERE character_id = ?""", 
+        (data['character_name'], data['level'], data['class'], data['subclass'],
+         data['race'], data['background'], data['strength'], data['dexterity'], data['constitution'],
+         data['intelligence'], data['wisdom'], data['charisma'], data['max_hp'], data['c_hp'], data['temp_hp'],
+         data['ac'], data['speed'], data['inspiration'], data['hit_die'], data['death_saves_success'],
+         data['death_saves_fail'], image_path_for_db, char_id))
+
+def update_skills(cursor, skills, char_id):
+    for skill_name, is_proficient in skills.items():
+        cursor.execute("""UPDATE cs
+                          SET cs.isProficient = ?
+                          FROM Character_Skills as cs
+                          JOIN Skills as s ON cs.skill_id = s.skill_id
+                          WHERE character_id = ? AND s.skill_name = ?""",
+                       (is_proficient, char_id, skill_name))
+
+def update_weapons(cursor, weapons):
+    for weapon in weapons:
+        cursor.execute("""UPDATE Weapons
+                          SET weapon_name = ?, atk_bonus = ?, damage_die = ?, extra_damage = ?, damage_type = ?
+                          WHERE weapon_id = ?""",
+                       (weapon["name"], weapon["atk_bonus"], weapon["damage_die"],
+                        weapon["extra_damage"], weapon["damage_type"], weapon["weapon_id"]))
 
 # --------------------------------------------------- MAIN --------------------------------------------------- #
 if __name__ == "__main__":
