@@ -1,8 +1,18 @@
+h2{
+    text-align: center;
+    margin-top: 4rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 2.7em; 
+    color: #3f2705ff; 
+    text-shadow: 3px 3px 4px #926019ff;
+}
+
 .bg-loaded {
     background-image: url("/static/images/backgroundImages/characterListBackground.png");
     background-position: center top;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
     background-attachment: scroll;
     min-height: calc(100vh - 5rem);
 }
@@ -18,7 +28,8 @@
     display: block;
     margin: 20px auto;
     font-size: 1.5em;
-    transition: transform 0.5s ease, box-shadow 0.3s ease;;
+    transition: transform 0.5s ease, box-shadow 0.3s ease;
+    width: max-content;
 }
 
 .createCharBtn:hover {
@@ -35,7 +46,8 @@
     flex-wrap: wrap;
     margin: 20px;
     gap: 30px;
-    padding: 10px 120px 70px 120px;
+    padding: 10px 5vw 70px 5vw;
+    box-sizing: border-box;
 }
 
 .characterCard {
@@ -43,8 +55,10 @@
     margin: 10px 0px;
     align-content: space-between;
     border-radius: 15px;
+    flex: 0 0 auto;
+    width: fit-content;
     min-width: 33%;
-    max-width: fit-content;
+    /* max-width: max-content; */
     min-height: 17vh;
     border: 3px solid #4731106e;
     padding: 10px;
@@ -54,11 +68,12 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-decoration: none;
     color: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .characterCard:hover {
     transform: translateY(-15px);
-    /* transform: scale(1.03); */
     border-color: #5838086e;
     box-shadow: 0 12px 25px 0 rgba(0, 0, 0, 0.30), 0 15px 33px 0 rgba(0, 0, 0, 0.45);
     cursor: pointer;
@@ -67,11 +82,10 @@
 }
 
 .charImageWrapper img{ 
-    height: 250px; 
-    width: 150px;  
-    object-fit: cover; 
-    aspect-ratio: 1 / 1; 
-    display: block; 
+    max-width: 150px;  
+    aspect-ratio: 3/5;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
 .basicStats {
@@ -86,7 +100,6 @@
     font-weight: 700;
     line-height: 1;
     margin-bottom: 5px;
-    /* border-bottom: 2px solid #4731106e; */
 }
 
 .classInfo {
@@ -95,7 +108,6 @@
     line-height: 1;
     margin-bottom: 5px;
 }
-
 
 .abilityScores {
     display: flex;
@@ -110,8 +122,34 @@
     align-items: stretch;
 }
 
+.singleAbiltyScore > div{
+    white-space: nowrap;
+}
+
 .label {
     font-weight: bold;
     color: #774a06;
     margin-right: 4px;
+}
+
+
+@media (max-width: 768px) {
+    .mainListCard {
+        padding: 10px;
+    }
+
+    .characterCard {
+        flex: 1 1 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .charImageWrapper img {
+        max-width: 100px;
+    }
+
+    .basicStats {
+        padding: 10px 0;
+        margin: 0;
+    }
 }

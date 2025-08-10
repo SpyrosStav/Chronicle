@@ -2,16 +2,16 @@
     background-image: url("/static/images/dashboardImage.png");
     background-position: center top;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
     background-attachment: relative;
     min-height: 100vh;
 }
 
 .title {
-    background-image: url("/static/images/backgroundImages/logo.png");
-    background-position: top left;
+    background-image: url("/static/images/backgroundImages/logo2.png");
+    background-position: top center;
     background-repeat: no-repeat;
-    background-size: contain;
-    min-width: 60vw;
+    background-size:contain;
+    width: 100%;
     min-height: 20vh;
 }

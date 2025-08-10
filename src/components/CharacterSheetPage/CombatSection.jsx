@@ -15,7 +15,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
     const inputRefHD = useRef(null);
 
     return(
-    <div className="combatStats backgroundCard mb-3">
+    <div className="combatStats mb-3">
         <div className='text-center' style={{marginBottom:"5px", fontSize:"1.2rem", fontWeight:"600"}}>COMBAT STATS</div>
 
         {/* ROW --> AC, INITIATIVE, SPEED */}
@@ -23,7 +23,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
 
             {/* AC */}
             <div className="col-4">
-                <div className="p-2 ac lightBackground">
+                <div className="p-2 ac backgroundCard">
                     <div className="ac-label">AC</div>
                     {isEditing ? 
                         (<div className='number-input-wrapper mb-0'>
@@ -44,7 +44,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
 
             {/* INITIATIVE */}
             <div className="col-4">
-                <div className="p-2 initiative lightBackground">
+                <div className="p-2 initiative backgroundCard">
                     <div className="initiative-label">Initiative</div>
                     <div className="initiative-value">+{dexterityModifier}</div>
                 </div>
@@ -52,7 +52,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
 
             {/* SPEED */}
             <div className="col-4">
-                <div className="p-2 speed lightBackground">
+                <div className="p-2 speed backgroundCard">
                     <div className="speed-label">Speed</div>
                     {isEditing ? 
                         (<div className='number-input-wrapper mb-0'>
@@ -78,7 +78,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
 
             {/* MAX HP */}
             <div className="col-4">
-                <div className="p-2  HPCard lightBackground">
+                <div className="p-2  HPCard backgroundCard">
                     <div className='maxHPSection'>
                         <div className="maxHP-label text-center">Maximum HP</div>
                         {isEditing ? 
@@ -101,7 +101,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
 
             {/* CURRENT HP */}
             <div className='col-4'>
-                <div className="currentHPSection lightBackground">
+                <div className="currentHPSection backgroundCard">
                     <div className="currentHP-label text-center">Current HP</div>
                     {isEditing ? 
                         (<div className='number-input-wrapper mb-0'>
@@ -122,7 +122,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
 
             {/* TEMPORARY HP */}
             <div className="col-4">
-                <div className="p-2 tempHPSection lightBackground">
+                <div className="p-2 tempHPSection backgroundCard">
                     <div className="tempHP-label">Temporary HP</div>
                     {isEditing ? 
                         (<div className='number-input-wrapper mb-0'>
@@ -149,7 +149,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
             {/* HIT DIE */}
             <div className="col-6">
                 <div className='hitDice-label'>Hit Dice</div>
-                <div className="p-2 hitDice lightBackground">
+                <div className="p-2 hitDice backgroundCard">
                     <div className='hitDiceContainer'>
                         {/* USED HD */}
                         <div>
@@ -185,7 +185,7 @@ export default function CombatSection({characterData, onStatChange, isEditing}){
             {/* DEATH SAVES */}
             <div className="col-6">
                 <div className='deathSaves-label'>Death Saves</div>
-                <div className="p-2 deathSaves lightBackground">
+                <div className="p-2 deathSaves backgroundCard">
                     <div className='deathSavesContainer'>
 
                         {/* SUCCESS */}

@@ -59,6 +59,7 @@ export default function AbilitySection({characterData, onStatChange, isEditing})
 
     return(
         <>
+            <div className='text-center' style={{marginBottom:"5px", fontSize:"1.2rem", fontWeight:"600", paddingTop:"10px"}}>ABILITY SCORES</div>
             <div className="profficiencyAttributes">
                 <div className="profficiencyBlock backgroundCard">
                     <div className="circle"> {proficiencyModifier > 0 ? (`+${proficiencyModifier}`) : proficiencyModifier}</div>
@@ -80,6 +81,7 @@ export default function AbilitySection({characterData, onStatChange, isEditing})
 
             {/* ABILITY SCORES */}
             <div className="AbilityScoresCard">
+                
 
                 {/* -- STRENGTH -- */}
                 <div className="stat">

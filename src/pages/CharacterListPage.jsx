@@ -22,12 +22,16 @@ export default function CharacterListPage({ username }) {
   if (error)   return <p>Error: {error}</p>;
   // if (!characters) return null;
 
+  const handleClick = () => {
+    window.location.href = "/charactercreation";
+  }
+
   return (
     <>
-      <h2 style={{textAlign: 'center', marginTop: "50px", 
-        marginBottom: "10px", fontWeight: "600", fontSize:"2.7em", color: "#3f2705ff", 
-        textShadow: "3px 3px 4px #926019ff"}}>CHARACTER LIST</h2>
-      <button className='btn backgroundCard createCharBtn'>Create new Character</button>
+      <h2>CHARACTER LIST</h2>
+      
+      <a href="/charactercreation" className="btn backgroundCard createCharBtn">Create new Character</a>
+      {/* <button className='btn backgroundCard createCharBtn' onClick={handleClick}>Create new Character</button> */}
       
       <CharacterList characterlist = {characters}></CharacterList>
     </>

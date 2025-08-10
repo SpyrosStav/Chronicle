@@ -127,13 +127,20 @@ def play():
 @app.route("/characterlist")
 @login_required
 def characterList():
-    username = session.get("username", '')
-    return render_template("characterListPage.html", username = username)
+    user_id = session.get("user_id", '')
+    return render_template("characterListPage.html", user_id = user_id)
 
 # CHARACTER SHEET PAGE
 @app.route("/charactersheet/<int:id>")
 def characterSheet(id):
     return render_template("characterSheetPage.html", char_id = id)
+
+# CHARACTER CREATION PAGE
+@app.route("/charactercreation")
+@login_required
+def characterCreation():
+    user_id = session.get("user_id", '')
+    return render_template("characterCreationPage.html", user_id = user_id)
 
 # CAMPAIGNS PAGE
 @app.route("/campaigns")
@@ -145,7 +152,7 @@ def campaignList():
 def profile():
     return render_template("profile.html")
 
-# --------------------------------------------------- API Calls --------------------------------------------------- #
+# --------------------------------------------------- API CALLS --------------------------------------------------- #
 # --------------- FETCH LIST OF CHARACTERS ---------------
 @app.route('/api/list-of-characters/')
 def get_list_of_characters():
@@ -154,8 +161,8 @@ def get_list_of_characters():
 
     cursor.execute(""" SELECT a.* 
                    FROM CHARACTERS AS a JOIN Players as b ON a.player_id = b.player_id 
-                   WHERE b.username = ? ORDER BY a.character_id ASC""", 
-                   (session["username"],)) 
+                   WHERE b.player_id = ? ORDER BY a.character_id ASC""", 
+                   (session["user_id"],)) 
     rows = cursor.fetchall()
 
     data = []
@@ -168,6 +175,29 @@ def get_list_of_characters():
 # --------------- CREATE CHARACTER ---------------
 @app.route('/api/create-character/', methods = ['POST'])
 def create_character(player_id):
+    # Check whether user is logged in
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    # Get Form Data
+    character_data_raw = request.form.get('characterData')
+    character_data = json.loads(character_data_raw)
+    image_file = request.files.get('image')
+
+    # Check if player is authorized   
+    if character_data["player_id"] != session["user_id"]:
+        return jsonify({"error": "Forbidden"}), 403
+    
+    # Get connection
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("""
+""")
+    except Exception as e:
+        return jsonify({"message":"Error creating character",
+                        "status":"danger"}), 400
+    
     return
 
 # --------------- FETCH CHARACTER ---------------
@@ -188,8 +218,7 @@ def get_single_character(char_id):
     # Fetch Skill Proficiencies
     cursor.execute("""SELECT a.character_id, b.skill_name, a.isProficient 
                     FROM Character_Skills as a JOIN Skills as b
-                    ON a.skill_id = b.skill_id 
-                    WHERE character_id = ?""", (char_id,))
+                    ON a.skill_id = b.skill_id WHERE character_id = ?""", (char_id,))
     rows = cursor.fetchall()
 
     data['skills'] = {row[1] : row[2] for row in rows}
@@ -198,8 +227,13 @@ def get_single_character(char_id):
     cursor.execute("""SELECT * FROM Weapons WHERE character_id = ?""", (char_id,))
     rows = cursor.fetchall()
     data['weapons'] = [{"weapon_id" : row[0], "name" : row[2], "atk_bonus" : row[3],
-                        "damage_die" : row[4], 
-                        "extra_damage": row[5], "damage_type": row[6]} for row in rows]
+                        "damage_die" : row[4], "extra_damage": row[5], "damage_type": row[6]} for row in rows]
+    
+    # Fetch Class Features
+    cursor.execute("""SELECT * FROM Character_Features WHERE character_id = ? ORDER BY level_required""", (char_id,))
+    rows = cursor.fetchall()
+    data['features'] = [{"feature_id" : row[0], "title" : row[2], "level_required" : row[3],
+                         "description" : row[4]} for row in rows]
 
     cursor.close()
     conn.close()
@@ -240,6 +274,7 @@ def update_character(char_id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Try Update
     try:
         # Update Main Attributes
         update_character_core(cursor, character_data, char_id, image_path_for_db)
@@ -247,13 +282,17 @@ def update_character(char_id):
         update_skills(cursor, character_data["skills"], char_id)
         # Update Weapons
         update_weapons(cursor, character_data["weapons"])
+        # Update Features
+        update_features(cursor,character_data["features"])
+
         conn.commit()
         return jsonify({"message": "Character updated successfully",
                         "status": "success"}), 200
     except Exception as e:
+        print(e)
         conn.rollback()
         return jsonify({"message": "Error updating character.",
-                        "status": "danger"}), 404
+                        "status": "danger"}), 405
     finally:
         cursor.close()
         conn.close()
@@ -265,8 +304,6 @@ def add_weapon(char_id):
         return jsonify({"error": "Unauthorized"}), 401
     player_id = session["user_id"]
     weapons = request.get_json()
-
-
 
     values = []
     for w in weapons:
@@ -328,6 +365,71 @@ def delete_weapon():
     
     return jsonify({"message":"success"}),200
 
+# --------------- ADD FEATURE ---------------
+@app.route('/api/add-feature/<int:char_id>', methods=['POST'])
+def add_feature(char_id):
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    player_id = session["user_id"]
+    features = request.get_json()
+
+    values = []
+    for f in features:
+        values.append((char_id,            
+                       f.get("title", ""),
+                        f.get("level_required", 0),
+                        f.get("description", ""),
+                    ))
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT 1 FROM Characters WHERE character_id = ? AND player_id = ?", (char_id, player_id))
+    if not cursor.fetchone():
+        return jsonify({"error": "Not allowed"}), 403
+
+    query = """INSERT INTO Character_Features (character_id,title,level_required,description)
+        VALUES (?,?,?,?)"""
+
+    try:
+        # Insert all new weapons in one batch
+        cursor.executemany(query, values)
+        conn.commit()
+        return jsonify({"message": "Features inserted successfully"}), 200
+
+    except Exception as e:
+        print(e)
+        conn.rollback()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
+
+# --------------- DELETE FEATURE ---------------
+@app.route('/api/delete-feature/', methods=['POST'])
+def delete_feature():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    player_id = session["user_id"]
+    feature_ids = request.get_json()
+    placeholders = ','.join('?' for _ in feature_ids)
+
+    query = f"""DELETE FROM Character_Features WHERE feature_id IN ({placeholders}) 
+                   AND character_id IN (
+                   SELECT character_id FROM Characters Where player_id = ?)"""
+
+    params = feature_ids + [player_id]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()   
+    cursor.execute(query, params)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    return jsonify({"message":"success"}),200
 
 # --------------- PROFILE INFO ---------------
 @app.route("/api/profile/", methods = ['GET'])
@@ -349,7 +451,7 @@ def fetch_profile():
 
     return jsonify(player_info), 200
 
-# --------------------------------------------------- HELPER FUNCTIONS ---------------------------------------------------
+# --------------------------------------------------- HELPER UPDATE FUNCTIONS ---------------------------------------------------
 def update_character_core(cursor, data, char_id, image_path_for_db):
     cursor.execute("""UPDATE dbo.Characters SET character_name = ?, level = ?, class = ?, subclass = ?, race = ?,
         background = ?, strength = ?, dexterity = ?, constitution = ?, intelligence = ?, wisdom = ?,
@@ -374,10 +476,17 @@ def update_skills(cursor, skills, char_id):
 def update_weapons(cursor, weapons):
     for weapon in weapons:
         cursor.execute("""UPDATE Weapons
-                          SET weapon_name = ?, atk_bonus = ?, damage_die = ?, extra_damage = ?, damage_type = ?
-                          WHERE weapon_id = ?""",
+                        SET weapon_name = ?, atk_bonus = ?, damage_die = ?, extra_damage = ?, damage_type = ?
+                        WHERE weapon_id = ?""",
                        (weapon["name"], weapon["atk_bonus"], weapon["damage_die"],
                         weapon["extra_damage"], weapon["damage_type"], weapon["weapon_id"]))
+        
+def update_features(cursor, features):
+    for feature in features:
+        cursor.execute("""UPDATE Character_Features
+                        SET title = ?, level_required = ?, description = ?
+                        WHERE feature_id = ?""",
+                       (feature["title"], feature["level_required"], feature["description"], feature["feature_id"]))
 
 # --------------------------------------------------- MAIN --------------------------------------------------- #
 if __name__ == "__main__":

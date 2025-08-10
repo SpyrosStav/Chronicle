@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}A&M - Characters List{% endblock %}
+{% block title %}A&M - Character Creation{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/characterListPage/characterListPage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/characterCreationPage/characterCreationPage.css') }}">
 {% endblock %}
 
 
@@ -21,7 +21,7 @@
             window.$RefreshSig$ = () => (type) => type
             window.__vite_plugin_react_preamble_installed__ = true
         </script>
-        <script type="module" src="http://192.168.1.202:5173/src/entry/characterListPage.jsx"></script>
+        <script type="module" src="http://192.168.1.202:5173/src/entry/characterCreationPage.jsx"></script>
     {% else %}
     {#  Production (#prod) #}
         <!-- <script type="module" src="{{ url_for('static', filename='js/character.js') }}"></script> -->

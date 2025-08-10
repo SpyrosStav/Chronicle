@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
-export default function useCharacterData(charId) {
-  const [char, setChar]       = useState(null);
+export default function useCharacterData(characterId) {
+  const [character, setChar]       = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
 
   useEffect(() => {
-    if (!charId) return;
+    if (!characterId) return;
 
     const controller = new AbortController();
     const signal = controller.signal;
@@ -14,7 +14,7 @@ export default function useCharacterData(charId) {
     setLoading(true);
     setError(null);
 
-    fetch(`/api/character/${charId}` , { signal })
+    fetch(`/api/character/${characterId}` , { signal })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -33,7 +33,7 @@ export default function useCharacterData(charId) {
       return () => {
       controller.abort();
       };
-    }, [charId]);
+    }, [characterId]);
 
-  return { char, loading, error };
+  return { character, loading, error };
 }

@@ -6,34 +6,37 @@ import ClassSection from './ClassSection.jsx';
 import FeaturesSection from './FeaturesSection.jsx';
 
 // --------------------------------------------------------------------- MAIN CARD ---------------------------------------------------------------------
-export default function HeroDashboard({characterData, onStatChange, isEditing, handleWeaponDelete, newWeapons, setNewWeapons}){
-
+export default function HeroDashboard({characterData, onStatChange, isEditing, 
+                                        handleWeaponDelete, newWeapons, setNewWeapons,
+                                        handleFeatureDelete, newFeatures, setNewFeatures})
+{
     return(
     <div className="attributes">
 
         {/* LEFT CARD - PROFICIENCIES, ABILITY SCORES */}
         <div className="attribute-group-left">
             {/* COMPONENT --> ABILITY SCORES */}
-            <AbilitySection characterData={characterData} onStatChange={onStatChange} isEditing={isEditing}></AbilitySection>
+            <AbilitySection characterData={characterData} onStatChange={onStatChange} isEditing={isEditing}/>
         </div>
 
-        {/* MIDDLE CARD - (HP, WEAPONS, CLASS SPECIFICS) */}
+        {/* MIDDLE CARD - HP, WEAPONS, CLASS SPECIFICS */}
         <div className="attribute-group-middle">
             {/* COMPONENT --> AC, INITIATIVE, SPEED - HP - HIT DIE, DEATH SAVES */}
-            <CombatSection characterData={characterData} onStatChange={onStatChange} isEditing={isEditing}></CombatSection>
+            <CombatSection characterData={characterData} onStatChange={onStatChange} isEditing={isEditing}/>
 
             {/* COMPONENT --> WEAPONS */}
             <WeaponSection characterData={characterData} isEditing={isEditing} onStatChange={onStatChange} 
-            handleWeaponDelete={handleWeaponDelete} newWeapons={newWeapons} setNewWeapons={setNewWeapons}></WeaponSection>
+            handleWeaponDelete={handleWeaponDelete} newWeapons={newWeapons} setNewWeapons={setNewWeapons}/>
 
             {/* COMPONENT --> SPECIFIC CLASS CARD (E.G. SPELLCASTING) */}
-            <ClassSection></ClassSection>
+            <ClassSection/>
         </div>
 
         {/* RIGHT CARD - FREE TEXT CARD FOR CLASS SKILLS */}
         <div className="attribute-group-right">
             {/* COMPONENT --> CHARACTER FEATURES */}
-            <FeaturesSection></FeaturesSection>
+            <FeaturesSection features={characterData.features} isEditing={isEditing} onStatChange={onStatChange}
+            handleFeatureDelete={handleFeatureDelete} newFeatures={newFeatures} setNewFeatures={setNewFeatures}/>
         </div>
 
     </div>

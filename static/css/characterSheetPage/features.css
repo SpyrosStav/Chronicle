@@ -1,0 +1,104 @@
+.characterFeatures{
+    padding: 10px;
+}
+
+.featureContainer {
+    padding: 10px;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.featureTitleAndLevel{
+    position: relative;
+    font-weight: 550;
+}
+
+.featureTitle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+.featureTitle::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #000000, transparent);
+}
+
+.featureLevel{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    right: -0.5rem;
+    top: -1rem;
+    width: 3.5rem;   
+    aspect-ratio: 1/1;
+    border: 2px solid black;
+    border-radius: 50%;
+    background-color: #8d612880;
+    gap: 0;
+}
+
+.feature-delete-button {
+    width: 1.3vw;
+    height: 1.3vw;
+    background: url('/static/images/svg/delete.svg') no-repeat center;
+    background-size: contain;
+    border: none;
+    margin: auto;
+}
+
+.feature-input{
+    border: none;
+    outline: none;
+    border-radius: 15px;
+}
+
+.feature-input:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.feature-input-title,
+.feature-input-level{
+    font-weight: 550;
+}
+
+.feature-input-level{
+    width: 2.5rem;
+}
+
+.feature-input-description{
+    width: 100%;
+    word-break: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    background: none;
+    overflow: 'hidden';
+    resize: none;
+}
+
+.add-feature-btn{
+    width: 100%;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid #473110ad;
+    padding: .375rem .75rem;
+    margin-top: 20px;
+}
+
+.add-feature-btn:focus-visible {
+    outline: none;
+}
+
+.feature-input::placeholder{
+    color: #271b08c0;
+}

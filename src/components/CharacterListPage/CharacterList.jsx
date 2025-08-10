@@ -22,7 +22,7 @@ export default function CharacterList({characterlist}){
 
                     <div className='abiltyScores'>
                         <div className='row'>
-                            <div className='col-6'>
+                            <div className='col-md-6 col-12'>
                                 <div className='singleAbiltyScore'>
                                     <img src="/static/images/svg/biceps-flexed.svg" alt="" />
                                     <div><span className="label">Strength:</span> {character.strength}</div>
@@ -36,7 +36,7 @@ export default function CharacterList({characterlist}){
                                     <div><span className="label">Constitution:</span> {character.constitution}</div>
                                 </div>
                             </div>
-                            <div className='col-6'>
+                            <div className='col-md-6 col-12'>
                                 <div className='singleAbiltyScore'>
                                     <img src="/static/images/svg/brain.svg" alt="" />
                                     <div><span className="label">Intelligence:</span> {character.intelligence}</div>

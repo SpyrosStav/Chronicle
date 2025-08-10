@@ -51,8 +51,9 @@ export default function WeaponSection({characterData, isEditing, onStatChange, h
 
     return(
     <div className="weaponsCard backgroundCard ">
+        <div className='weapons-label'>WEAPONS</div>
 
-        <div className='weapons-label'>WEAPONS</div>     
+             
         <div className='row align-items-end'>
             {isEditing ? 
                 (<>
