@@ -1,27 +1,18 @@
-import React, {useState} from 'react';
-
-    const races = ["Dragonborn","Dwarf","Elf","Gnome","Half-Elf","Half-Orc","Halfling","Human","Tiefling"];
-    const classes = ["Artificier", "Barbarian", "Bard", "Bloodhunter", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"];
-    const subclasses = {
-        "Artificier" : ["Alchemist", "Armorer", "Artillerist", "Battle Smith"],
-        "Barbarian" : ["Ancestral Guardian","Battlerager", "Beast", "Berseker", "Giant", "Storm Herald", "Totem Warrior", "Wild Magic", "Zealot"],
-        "Bard" : ["College of Creation","College of Eloquence","College of Glamour","College of Lore",
-                    "College of Spirits","College of Swords","College of Valor","College of Whispers"],
-        "Bloodhunter" : ["Ghostslayer", "Lycan", "Mutant", "Profane Soul"],
-        "Cleric" : ["Arcana", "Death", "Forge", "Grave", "Knowledge", "Life", "Light", "Nature", "Order", "Peace", "Tempest", "Trickery", "Twilight", "War"],
-        "Druid" : ["Circle of Dreams", "Circle of the Land", "Circle of the Moon", "Circle of the Shepard", "Circle of Spores", "Circle of Stars", "Circle of Wildfire"],
-        "Fighter" : ["Arcane Archer", "Banneret", "Battle Master", "Cavalier", "Champion", "Echo Knight", "Eldritch Knight", "Psi Warrior", "Rune Warrior", "Samurai"],
-
-    };
+import React, {useEffect, useState, useRef} from 'react';
+import {RACES, CLASSES, SUBCLASSES, CLASS_DESCRIPTION} from './classesInfo.jsx';
+import BACKGROUNDS from '../../data/backgrounds.json';
+import RACE_INFO from '../../data/races.json';
+import { incrementValue, decrementValue} from '../../utils/inputHandler.js';
 
 export default function CharacterCreation({characterData,handleCharacterChange, handleImageChange, imagePreviewUrl}){
     const [currentPage, setCurrentPage] = useState(1);
-    
+    const [asBonuses, setASBonuses] = useState([]);
+    const inputRefLevel = useRef(null);
     
     return(
         <div>
             {/* Profile Image, Name */}
-            <fieldset style={{margin:"20px auto"}} className='field-name'>
+            <fieldset style={{margin:"0px auto 5px"}} className='field-name'>
 
                 {/* Image */}
                 <input  type="file" accept="image/*" style={{ display: "none" }} id="characterImage" 
@@ -38,162 +29,259 @@ export default function CharacterCreation({characterData,handleCharacterChange, 
                 </label>
 
                 {/* Name */}
-                <div className='form-group-name'>
+                <div className='form-group-name' style={{margin:"auto 0"}}>
                     <label htmlFor="characterName">Character Name</label>
                     <input 
                         type="text" id='characterName' value={characterData.character_name}
                         onChange={(e) => handleCharacterChange("name", e.target.value)}
                     />
                 </div>
+
+                {/* Level */}
+                <div className='form-group-level' style={{margin:"auto 0"}}>
+                    <label htmlFor="characterLevel">Level</label>
+                    <input type="number" ref={inputRefLevel} min={1} max={20}
+                        value={characterData.level}
+                        id='custom-number' className="levelBadge text-center" 
+                        onChange={(e) => handleCharacterChange('level', parseInt(e.target.value))}
+                    />
+                    <div className="spinner-buttons" style={{top:"15px"}}>
+                        <button className='up' onClick={() => {incrementValue('level',inputRefLevel,handleCharacterChange)}}></button>
+                        <button className='down' onClick={() => {decrementValue('level',inputRefLevel,handleCharacterChange)}}></button>
+                    </div>
+                </div>
+
             </fieldset>
 
             <div className='menu'>
-                <button onClick={() => setCurrentPage(1)} className = {currentPage === 1 ? 'selected' : ''}>Class</button>
-                <button onClick={() => setCurrentPage(2)} className = {currentPage === 2 ? 'selected' : ''}>Basic Information</button>
-                <button onClick={() => setCurrentPage(3)} className = {currentPage === 3 ? 'selected' : ''}>Ability Scores</button>
-                <button onClick={() => setCurrentPage(4)} className = {currentPage === 4 ? 'selected' : ''}>Equipment</button>
-                <button onClick={() => setCurrentPage(5)} className = {currentPage === 5 ? 'selected' : ''}>Summary</button>
+                <button onClick={() => setCurrentPage(1)} className = {currentPage === 1 ? 'selected' : ''}>1.Class</button>
+                <button onClick={() => setCurrentPage(2)} className = {currentPage === 2 ? 'selected' : ''}>2.Race</button>
+                <button onClick={() => setCurrentPage(3)} className = {currentPage === 3 ? 'selected' : ''}>3.Background</button>
+                <button onClick={() => setCurrentPage(4)} className = {currentPage === 4 ? 'selected' : ''}>4.Ability Scores</button>
+                <button onClick={() => setCurrentPage(5)} className = {currentPage === 5 ? 'selected' : ''}>5.Equipment</button>
+                <button onClick={() => setCurrentPage(6)} className = {currentPage === 6 ? 'selected' : ''}>6.Summary</button>
             </div>
 
             <div className='characterForm'>
                 {/* Class */}
-                {currentPage === 1 && <ClassGroup characterData = {characterData} handleCharacterChange={handleCharacterChange} />}
-                
+                {currentPage === 1 && <ClassGroup characterData = {characterData} handleCharacterChange={handleCharacterChange}/>}
 
+                {/* Race */}
+                {currentPage === 2 && <RaceGroup characterData = {characterData} handleCharacterChange={handleCharacterChange} setASBonuses={setASBonuses}/>}
+
+                {/* Background */}
+                {currentPage === 3 && <BackgroundGroup characterData = {characterData} handleCharacterChange={handleCharacterChange} setASBonuses={setASBonuses}/>}
+                
                 {/* Ability Scores */}
-                {currentPage === 3 && <AbiltyScoreGroup characterData = {characterData} handleCharacterChange={handleCharacterChange} />}
+                {currentPage === 4 && <AbiltyScoreGroup characterData = {characterData} handleCharacterChange={handleCharacterChange} />}
 
                 {/* Equipment */}
-                {currentPage === 4 && <EquipmentGroup characterData = {characterData} handleCharacterChange={handleCharacterChange} />}
+                {currentPage === 5 && <EquipmentGroup characterData = {characterData} handleCharacterChange={handleCharacterChange} />}
 
             </div>
         </div>
     )
 }
 
-// Name - Class - Race
+// Class - Subclass
 function ClassGroup({characterData,handleCharacterChange}){
-    const [currentClass, setCurrentClass] = useState(null);
+    const currentClass = characterData.character_class;
+    const currentSubclass = characterData.subclass;
 
     return(
-        <fieldset style={{marginBottom:"20px"}}>
-            
+        <fieldset className='classPanel' style={{marginBottom:"20px", position:"relative"}}>
+
+            {characterData.character_class ? 
+                (<div className='form-group form-group-description' style={{padding:"5px 1rem",whiteSpace: "pre-line"}}>
+                    <p style={{textAlign:"center", fontSize:"1.5rem", margin:"0"}}>{characterData.character_class}</p>
+                    {CLASS_DESCRIPTION[characterData.character_class]}
+                </div>) : (null)
+            }
 
             {/* Class */}
-            <div className='form-group'>
+            <div className='form-group form-group-class'>
                 <label htmlFor="characterClass" style={{textAlign:"center", fontSize:"1.3rem", marginBottom:"5px"}}>Select Class</label>
                 <div className='classContainer'>
-                    {classes.map(cls => (
+                    {CLASSES.map(cls => (
                         <button key={cls} className={currentClass === cls ? 'classSelected' : ''}
                             onClick={() => 
-                                {handleCharacterChange("character_class",cls);
-                                handleCharacterChange("customCharacter_class","")
-                                setCurrentClass(cls);}
-                            }
-                        >
-
+                                {
+                                    handleCharacterChange("character_class",cls);
+                                    handleCharacterChange("customCharacter_class","")
+                                }
+                            }>
                             <img src={'/static/images/characterCreation/'+cls+".png"}></img>
-
                             <span>{cls}</span>
-
                         </button>
                     ))}
-                    <button onClick={() => 
-                            {handleCharacterChange("character_class","Other");
-                            setCurrentClass("Other");
-                        }}
-                        className={currentClass === "Other" ? 'classSelected' : ''}> 
-                        <span style={{margin:"auto", fontSize:"1.5rem"}}>Other</span>
-                    </button>
                 </div>
-
-                {characterData.character_class === "Other" && (
-                    <input 
-                        type="text" placeholder="Enter your class"
-                        value={characterData.customCharacter_class || ""}
-                        onChange={e => handleCharacterChange("customCharacter_class", e.target.value)}
-                    />
-                )}
-
             </div>
 
             {/* Subclass */}
-            <div className='form-group'>
-                <label htmlFor="characterSublass">Subclass</label>
-                <select id='characterSubclass' value={characterData.subclass}
-                    onChange={(e) => {
-                        handleCharacterChange("subclass", e.target.value)
-                        handleCharacterChange("customSubclass","")}}>
+            {characterData.character_class ? (
+                <div className='form-group form-group-subclass'>
+                    <label htmlFor="characterSublass" style={{textAlign:"center", fontSize:"1.3rem", marginBottom:"5px"}}>Select Subclass</label>
 
-                    <option value="" disabled selected>Select Subclass</option>
-                    {(subclasses[characterData.character_class] || []).map(subclass => (
-                        <option key={subclass} value={subclass}>{subclass}</option>
-                    ))}
-                    <option value="Other"> Other </option>
+                    <div className='subclassContainer'>
+                        {(SUBCLASSES[characterData.character_class] || []).map(subclass => (
+                            <button key={subclass} className={currentSubclass === subclass ? 'classSelected' : ''}
+                                onClick={() => 
+                                    {
+                                        handleCharacterChange("subclass",subclass);
+                                        handleCharacterChange("customSubclass","")
+                                    }
+                                }
+                            >
+                                <span>{subclass}</span>
+                            </button>
+                        ))}
+                    </div>
 
-                </select>
-
-                {characterData.subclass === "Other" && (
-                    <>
-                        <br></br>
-                        <input 
-                            type="text" placeholder="Enter your subclass"
-                            value={characterData.customSubclass || ""}
-                            style={{marginTop:"10px"}}
-                            onChange={e => handleCharacterChange("customSubclass", e.target.value)}
-                        />
-                    </>
-                )}
-            </div>
-
+                </div>
+            ):(null)}
             
-
         </fieldset>
     )
 
 }
 
-function BasicInfoGroup({}){
-    return(
-        <fieldset>
-            {/* Race */}
-            <div className='form-group'>
-                <label htmlFor='race'>Race</label>
-                <select name='race' id='race' value={characterData.race}
-                    onChange={(e) => { 
-                            handleCharacterChange("race", e.target.value)
-                            handleCharacterChange("customRace", "")
-                        }
-                    }
-                >
-                    <option value="" disabled selected>Select Race</option>
-                    {races.map(race => (
-                        <option key={race} value={race}>{race}</option>
-                    ))}
-                    <option value="Other">Other</option>
-                </select>
+function RaceGroup({characterData,handleCharacterChange,setASBonuses}){
+    const currentRace = characterData.race;
+    const raceObject = RACE_INFO.results.find(race => race.name === characterData.race);
+    const bonuses = ["Strength_bonus","Dexterity_bonus","Constitution_bonus","Intelligence_bonus","Wisdom_bonus","Charisma_bonus","Other_bonus"];
 
-                {characterData.race === "Other" && (
-                    <>
-                        <br></br>
-                        <input 
-                            type="text" placeholder="Enter your race"
-                            value={characterData.customRace || ""}
-                            style={{marginTop:"10px"}}
-                            onChange={e => handleCharacterChange("customRace", e.target.value)}
-                        />
-                    </>
-                )}
+    useEffect(() => {
+        if(raceObject){
+            
+            bonuses.map((bonus)=> (
+                handleCharacterChange(bonus,0)
+            ));
+            raceObject.asi.map((as) => {
+                                    handleCharacterChange(as.attributes[0]+"_bonus",as.value);
+                                    // console.log("updated", as.attributes[0]+"_bonus value ", as.value)
+                            });
+            handleCharacterChange("speed", raceObject.speed.walk);
+        }
+    },[raceObject])
+
+    return(
+        <fieldset className='basicInfoPanel' style={{marginBottom:"20px", position:"relative"}}>
+
+            {/* Race */}
+            <div className='form-group form-group-race'>
+                <label htmlFor='race' style={{textAlign:"center", marginBottom:'5px',fontSize:"1.3rem"}}>Select Race</label>
+                <div className='raceContainer'>
+                    {RACES.map(race => (
+                        <button key={race} className={currentRace === race ? 'classSelected' : ''}
+                            onClick={() => 
+                            {
+                                handleCharacterChange("race", race);
+                                handleCharacterChange("customRace", "");
+                            }
+                        }>
+                            <span>{race}</span>
+                        </button>
+                    ))}
+                </div>
             </div>
+
+            {/* Races Description */}
+            {characterData.race ? (
+                <div className='form-group form-group-raceDesc'>
+                    <label style={{textAlign:"center",fontSize:"1.5rem"}}>{characterData.race}</label>
+                    <div className='raceDescContainer'>
+                        <div key={raceObject.slug} className='raceFeatures'>
+                            {/* Description */}
+                            <div className='raceDesc'>{raceObject.desc.replace(/^## .* Traits\s*/, '')}</div>
+                            {/* AS Increase */}
+                            <div className='traitsLabels'>Abilty Score Increase</div>
+                            <div className='raceAS'>{raceObject.asi_desc.replace(/^\*\*\_Ability Score Increase\.\_\*\*/, '')}</div>
+                            {/* Languages, Size, Speed */}
+                            <div className='traitsLabels'>Age</div>
+                            <div>{raceObject.age.replace(/\*\*.*\*\*/, '')}</div>
+                            <div className='traitsLabels'>Size</div>
+                            <div>{raceObject.size.replace(/\*\*.*\*\*/, '')}</div>
+                            <div className='traitsLabels'>Languages</div>
+                            <div>{raceObject.languages.replace(/\*\*.*\*\*/, '')}</div>
+                            <div className='traitsLabels'>Speed</div>
+                            <div>{raceObject.speed_desc.replace(/\*\*.*\*\*/, '')}</div>
+
+                            {raceObject.vision.length > 0 ? (
+                                <>
+                                    <div className='traitsLabels'>Vision</div>
+                                    <div>{raceObject.vision.replace(/\*\*.*\*\*/, '')}</div>
+                                </>
+                            ):(null)}
+
+                            {raceObject.traits.length > 0 ? (
+                                <>
+                                    <div className='traitsLabels'>Traits</div>
+                                    <div style={{whiteSpace: "pre-wrap"}}>
+                                        {raceObject.traits.replace(/\*\*_/g,'')
+                                        .replace(/\._\*\*/g,':')
+                                        .replace(/\*\*.*\*\*/g,"")
+                                        .replace(/\n\n/g,"\n")}
+                                    </div>
+                                </>
+                            ):(null)}
+                        </div>
+                    </div>
+                </div>) :(null)
+            }
         </fieldset>
     )
+}
+
+function BackgroundGroup({characterData,handleCharacterChange,setASBonuses}){
+    const currentBackground = characterData.background;
+
+    return(
+        <fieldset className='basicInfoPanel' style={{marginBottom:"20px", position:"relative"}}>
+
+            {/* Backgrounds */}
+            <div className='form-group form-group-background'>
+                <label htmlFor='background' style={{textAlign:"center", marginBottom:'5px',fontSize:"1.3rem"}}>Select Background</label>
+                <div className='backgroundContainer'>
+                    {BACKGROUNDS.results.map(background => (
+                        <button key={background.name} className={currentBackground === background.name ? 'classSelected' : ''}
+                            onClick={() => 
+                                {
+                                    handleCharacterChange("background",background.name);
+                                    // handleCharacterChange("customRace","");
+                                }
+                        }>
+                            <span>{background.name}</span>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Backgrounds Description */}
+            {characterData.background ? (
+                <div className='form-group form-group-background'>
+                    <label htmlFor='background' style={{textAlign:"center",fontSize:"1.5rem"}}>{characterData.background}</label>
+                    <div className=''>
+                        {BACKGROUNDS.results.find(bg => bg.name === characterData.background).benefits.map(benefit => (
+                            (benefit.type === "connection_and_memento" || benefit.type === "suggested_characteristics") ? (null):(
+                            <div key={benefit.name} className='backgroundFeatures'>
+                                <div className='traitsLabels'>{benefit.name}</div>
+                                <div className='backgroundDesc'>{benefit.desc}</div>
+                            </div>
+                        )))}
+                    </div>
+                </div>) :(null)
+            }
+
+        </fieldset>
+    )
+
 }
 
 // Abilty Scores
 function AbiltyScoreGroup({characterData,handleCharacterChange}){
     return(
         <fieldset>
-
+            
         </fieldset>
     )
 }

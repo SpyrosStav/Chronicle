@@ -3,21 +3,14 @@ import CharacterCreation from '../components/CharacterCreationPage/CharacterCrea
 
 export default function CharacterCreationPage({  }) {
     const [characterData,setCharacterData] = useState({
-        name: "",
+        character_name: "",
         level: 1,
-        character_class: "",
-        customCharacter_class:"",
-        subclass: "",
-        customSubclass: "",
-        race: "",
-        customRace: "",
+        character_class: "", customCharacter_class:"",
+        subclass: "", customSubclass: "",
+        race: "", customRace: "",
         background: "",
-        strength: 10,
-        dexterity: 10,
-        constitution: 10,
-        intelligence: 10,
-        wisdom: 10,
-        charisma: 10,
+        strength: 10, dexterity: 10, constitution: 10, intelligence: 10, wisdom: 10, charisma: 10,
+        Strength_bonus: 0, Dexterity_bonus: 0, Constitution_bonus: 0, Intelligence_bonus: 0, Wisdom_bonus: 0, Charisma_bonus: 0, Other_bonus: 0,
         max_hp: 1,
         ac: 10,
         speed: 30
@@ -48,6 +41,24 @@ export default function CharacterCreationPage({  }) {
         reader.onloadend = () => { setImagePreviewUrl(reader.result); };
         reader.readAsDataURL(file);
     };
+
+    // Api for Character Data
+    // const [classesInfo, setClassesInfo] = useState([])
+    // useEffect(() => {
+    //     fetch(`https://api.open5e.com/v1/classes/`)
+    //     .then((response) => {
+    //         if (!response.ok) {
+    //         throw new Error(`HTTP error! status: ${response.status}`);
+    //         }
+    //         return response.json();
+    //     })
+    //     .then((data) => {setClassesInfo(data.results)})
+    //     .catch((err) => {
+    //         if (err.name === 'AbortError') {
+    //         return;
+    //         }
+    //     });
+    // },[]);
     
     return(
     <>
