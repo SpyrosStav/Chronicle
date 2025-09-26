@@ -1,8 +1,8 @@
 # Chronicle - A DnD Web Application
 
-![Demo Screenshot](./images/character-list.png)
-
 A Flask + React application for managing DnD characters, sheets, and gameplay pages.
+
+![Demo Screenshot](./images/character-creation1.png)
 
 ## Tech Stack
 
@@ -136,3 +136,10 @@ Auth routes:
 - ODBC/pyodbc errors: verify ODBC Driver 17 is installed and connection variables are correct.
 - 401/403 from APIs: certain routes require a session; login first.
 - Dev proxy fails: ensure Flask is running at the configured host/port or adjust the proxy target.
+
+
+![Demo Screenshot](./images/character-list.png)
+
+![Demo Screenshot](./images/character-sheet1.png)
+
+![Demo Screenshot](./images/character-sheet2.png)  
