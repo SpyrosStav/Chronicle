@@ -1,5 +1,7 @@
 # Chronicle - A DnD Web Application
 
+![Demo Screenshot](./images/character-list.png)
+
 A Flask + React application for managing DnD characters, sheets, and gameplay pages.
 
 ## Tech Stack
