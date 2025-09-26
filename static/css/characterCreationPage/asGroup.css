@@ -1,0 +1,43 @@
+.asGroup{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+}
+
+input[type="radio"]{
+    background: none !important;
+}
+
+.asGrid{
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 0px 20px;
+    margin: 0 auto;
+}
+
+th{
+    font-size: 1.2rem;
+    border-bottom: 2px solid black;
+    max-height: max-content;
+}
+td{
+    font-size: 1.1rem;
+    position: relative;
+}
+
+.asRow input{
+    width: 25% !important;
+    min-width: 0 !important;
+    border: none !important;
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    text-align: center;
+}
+
+
+#otherBonusSelect1, #otherBonusSelect2, #standardArray{
+    min-width: 0 !important;
+}
+

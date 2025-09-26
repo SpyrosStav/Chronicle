@@ -36,6 +36,27 @@
     align-items: center;
 }
 
+.raceContainer button{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.raceContainer button:hover{
+    outline-style: auto;
+    outline-style: ridge;
+    outline-color:beige;
+}
+
+.raceContainer img{
+    max-width: 40px;
+    max-height: 40px;
+    aspect-ratio: 1/1;
+}
+
+.raceContainer span{
+    margin: auto;
+}
+
 .backgroundContainer{
     display: flex;
     flex-direction: row;
@@ -60,12 +81,6 @@
     width: max-content;
 }
 
-.raceContainer button:hover{
-    outline-style: auto;
-    outline-style: ridge;
-    outline-color:beige;
-}
-
 .raceFeatures{
     padding: 0 1rem;
 }
@@ -75,3 +90,4 @@
     white-space: pre-wrap;
     text-decoration: underline;
 }
+

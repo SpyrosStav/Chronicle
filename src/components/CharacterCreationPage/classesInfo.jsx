@@ -1,7 +1,7 @@
 export const RACES = ["Dragonborn","Dwarf","Elf","Gnome","Half-Elf","Half-Orc","Halfling","Human","Tiefling"];
-export const CLASSES = ["Artificier", "Barbarian", "Bard", "Bloodhunter", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"];
+export const CLASSES = ["Artificer", "Barbarian", "Bard", "Bloodhunter", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"];
 export const SUBCLASSES = {
-    "Artificier" : ["Alchemist", "Armorer", "Artillerist", "Battle Smith"],
+    "Artificer" : ["Alchemist", "Armorer", "Artillerist", "Battle Smith"],
     "Barbarian" : ["Ancestral Guardian","Battlerager", "Beast", "Berseker", "Giant", "Storm Herald", "Totem Warrior", "Wild Magic", "Zealot"],
     "Bard" : ["College of Creation","College of Eloquence","College of Glamour","College of Lore",
                 "College of Spirits","College of Swords","College of Valor","College of Whispers"],
@@ -22,8 +22,8 @@ export const SUBCLASSES = {
     ]
 };
 
-export const CLASS_DESCRIPTION ={
-    "Artificier" : `Makers of magic-infused objects, artificers are defined by their inventive nature. 
+export const CLASS_DESCRIPTION = {
+    "Artificer" : `Makers of magic-infused objects, artificers are defined by their inventive nature. 
                     They see magic as a complex system waiting to be decoded and controlled. 
                     Instead of ephemeral spells, they seek to craft durable, useful, marvelous magical items.`,
     "Barbarian" : `For some, their rage springs from a communion with fierce animal spirits. 
@@ -64,5 +64,22 @@ export const CLASS_DESCRIPTION ={
 
     "Wizard" : `Wizards are supreme magic-users, defined and united as a class by the spells they cast. 
                 Drawing on the subtle weave of magic that permeates the cosmos, wizards cast spells of explosive fire, arcing lightning, subtle deception, brute-force mind control, and much more.`
+}
+
+export const CLASSES_HD = {
+    "Artificer" : 8,
+    "Barbarian" : 12,
+    "Bard" : 8, 
+    "Bloodhunter" : 10, 
+    "Cleric" : 8, 
+    "Druid" : 8, 
+    "Fighter" : 10,
+    "Monk" : 8,
+    "Paladin" : 10,
+    "Ranger" : 10,
+    "Rogue" : 8,
+    "Sorcerer" : 6,
+    "Warlock" : 8,
+    "Wizard" : 6
 }
 

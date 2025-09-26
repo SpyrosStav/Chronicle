@@ -37,7 +37,7 @@ h2{
     flex-direction: column;
     justify-content: center;
     gap: 10px;
-    align-items: center;
+    /* align-items: center; */
 }
 
 .imageLabel{
@@ -99,7 +99,7 @@ label {
     border-radius: 15px;
 }
 
-.form-group input, .form-group select,
+.form-group input:not(input[type="radio"]), .form-group select,
 .form-group-name input{
     border-radius: 10px;
     min-width: 200px;
