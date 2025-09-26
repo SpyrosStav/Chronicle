@@ -1,4 +1,4 @@
-# DnD Web App
+# Chronicle - A DnD Web Application
 
 A Flask + React (Vite) application for managing DnD characters, sheets, and gameplay pages.
 
@@ -134,3 +134,4 @@ Auth routes:
 - ODBC/pyodbc errors: verify ODBC Driver 17 is installed and connection variables are correct.
 - 401/403 from APIs: certain routes require a session; login first.
 - Dev proxy fails: ensure Flask is running at the configured host/port or adjust the proxy target.
+
