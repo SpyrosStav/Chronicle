@@ -1,1 +1,0 @@
-from . import pwd_hash, register
