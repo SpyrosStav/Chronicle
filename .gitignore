@@ -1,2 +1,2 @@
-config.env
-/backend/.env
+/backend/src/.env
+/python_backend/
