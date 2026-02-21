@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  postgres:
+      image: postgres:16
+      container_name: chronicle_db
+      restart: always
+      environment:
+        POSTGRES_USER: chronicle
+        POSTGRES_PASSWORD: chronicle
+        POSTGRES_DB: chronicle_db
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      ports:
+        - "5433:5432"
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U chronicle -d chronicle_db"]
+        interval: 2s
+        retries: 10
+
+  liquibase:
+    image: liquibase/liquibase:latest
+    container_name: chronicle_migrations
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./liquibase/changelogs:/liquibase/changelog
+      - ./liquibase/drivers:/liquibase/drivers
+    command:
+      [
+        "--url=jdbc:postgresql://postgres:5432/chronicle_db",
+        "--changeLogFile=db.changelog-master.xml",
+        "--username=chronicle",
+        "--password=chronicle",
+        "--classpath=/liquibase/drivers/postgresql-42.7.10.jar",
+        "update"
+      ]
+
+volumes:
+  postgres_data:

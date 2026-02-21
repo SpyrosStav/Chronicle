@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: chronicle_api
+    restart: always
+    environment:
+      DB_HOST: postgres
+      DB_USER: chronicle
+      DB_PASSWORD: chronicle
+      DB_NAME: chronicle_db
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build: ./frontend
+    container_name: chronicle_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"

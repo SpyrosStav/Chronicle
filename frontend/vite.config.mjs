@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
-    cors: true, 
+    cors: true,
     proxy: {
       '/api': {
         target: 'http://192.168.1.203:5000',
@@ -16,19 +16,20 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'static/js',      //  ➜ Flask static path
+    outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        character: resolve(__dirname, 'src/entry/characterPage.jsx'),
-        // campaigns: resolve(__dirname, 'src/entry/campaignsPage.jsx'),
+        characterCreation: resolve(__dirname, 'src/entry/characterCreationPage.jsx'),
+        characterList: resolve(__dirname, 'src/entry/characterListPage.jsx'),
+        characterSheet: resolve(__dirname, 'src/entry/characterSheetPage.jsx'),
       },
 
       output: {
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
         assetFileNames: '[name].[ext]'
-        },
+      },
     },
   },
 });
